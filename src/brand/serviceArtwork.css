@@ -1,0 +1,26 @@
+/* Preserve glass highlights while blending the white studio background. */
+img:is(
+  [src="/images/service-themes/dialogue-natural.webp"],
+  [src="/images/service-themes/support-natural.webp"],
+  [src="/images/service-themes/learning-natural.webp"]
+) {
+  filter: brightness(1.02);
+  mix-blend-mode: var(--service-art-blend, multiply);
+  background-color: var(--service-art-background, transparent);
+  border-radius: var(--service-art-radius, 0);
+}
+
+/* Multiplying over a dark surface would hide the photographs. */
+html[data-a11y-contrast="dark"] {
+  --service-art-blend: normal;
+  --service-art-background: #fff;
+  --service-art-radius: 16px;
+}
+
+@media (forced-colors: active) {
+  :root {
+    --service-art-blend: normal;
+    --service-art-background: #fff;
+    --service-art-radius: 16px;
+  }
+}

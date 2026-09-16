@@ -1,0 +1,105 @@
+.intro-visual {
+  --intro-reveal-ease: cubic-bezier(0.2, 0.78, 0.24, 1);
+}
+
+.intro-visual[data-reveal-ready="true"]
+  :is(.intro-branch, .intro-portraits > *) {
+  opacity: 1;
+  scale: 1;
+  rotate: 0deg;
+  clip-path: inset(0 0 0 0 round 0%);
+  transition:
+    opacity 520ms var(--intro-reveal-ease),
+    clip-path 1050ms var(--intro-reveal-ease),
+    scale 1100ms var(--intro-reveal-ease),
+    rotate 1100ms var(--intro-reveal-ease);
+  transition-delay: var(--intro-reveal-delay, 0ms);
+}
+
+.intro-visual[data-reveal-ready="true"] .intro-branch {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 75%, 0 42%, 0 18%);
+  transform-origin: 100% 60%;
+}
+
+.intro-visual[data-reveal-ready="true"] .intro-portraits > * {
+  transform-origin: 50% 95%;
+}
+
+.intro-visual[data-reveal-ready="true"]:not([data-revealed="true"])
+  :is(.intro-branch, .intro-portraits > *) {
+  opacity: 0;
+}
+
+/* The tapered edge follows the branch, then each portrait opens from its base. */
+.intro-visual[data-reveal-ready="true"]:not([data-revealed="true"])
+  .intro-branch {
+  clip-path: polygon(
+    116% 0,
+    100% 0,
+    100% 100%,
+    116% 100%,
+    106% 75%,
+    100% 42%,
+    108% 18%
+  );
+  rotate: 1.4deg;
+}
+
+.intro-visual[data-reveal-ready="true"]:not([data-revealed="true"])
+  .intro-portraits
+  > * {
+  clip-path: inset(66% 12% 0 12% round 45% 45% 22% 22%);
+  scale: 0.92 1.04;
+  rotate: -5deg;
+}
+
+.intro-visual[data-reveal-ready="true"]:not([data-revealed="true"])
+  .intro-portraits
+  > .intro-leaf {
+  clip-path: inset(14% 7% 0 7% round 50%);
+  scale: 0.82;
+  rotate: 13deg;
+}
+
+.intro-visual .intro-branch {
+  --intro-reveal-delay: 0ms;
+}
+.intro-visual .intro-portrait-natalia {
+  --intro-reveal-delay: 240ms;
+}
+.intro-visual .intro-leaf {
+  --intro-reveal-delay: 420ms;
+}
+.intro-visual .intro-portrait-eduard {
+  --intro-reveal-delay: 600ms;
+}
+
+@media (max-width: 760px) {
+  .intro-visual .intro-portrait-eduard {
+    --intro-reveal-delay: 240ms;
+  }
+  .intro-visual .intro-portrait-natalia {
+    --intro-reveal-delay: 600ms;
+  }
+}
+
+:root[data-a11y-reduce-motion="true"]
+  .intro-visual[data-reveal-ready="true"]
+  :is(.intro-branch, .intro-portraits > *) {
+  opacity: 1 !important;
+  clip-path: none !important;
+  scale: none !important;
+  rotate: none !important;
+  transition: none !important;
+}
+
+@media (prefers-reduced-motion: reduce), print {
+  .intro-visual[data-reveal-ready="true"]
+    :is(.intro-branch, .intro-portraits > *) {
+    opacity: 1 !important;
+    clip-path: none !important;
+    scale: none !important;
+    rotate: none !important;
+    transition: none !important;
+  }
+}

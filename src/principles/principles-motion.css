@@ -1,0 +1,115 @@
+.principles-scene {
+  --principles-ease: cubic-bezier(0.2, 0.78, 0.24, 1);
+}
+
+/* Independent rotate preserves the branch's responsive mirror and layout. */
+.principles-scene[data-reveal-ready="true"] .principles-branch {
+  opacity: 1;
+  rotate: 0deg;
+  transform-origin: 50% 50%;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 75%, 0 42%, 0 18%);
+  transition:
+    clip-path 1250ms var(--principles-ease),
+    rotate 1400ms var(--principles-ease),
+    opacity 650ms var(--principles-ease);
+}
+
+.principles-scene[data-reveal-ready="true"]:not([data-branch-revealed="true"])
+  .principles-branch {
+  opacity: 0;
+  rotate: -1.25deg;
+  clip-path: polygon(
+    116% 0,
+    100% 0,
+    100% 100%,
+    116% 100%,
+    106% 75%,
+    100% 42%,
+    108% 18%
+  );
+}
+
+/* The glass circles open like lenses, with the hinge near the branch. */
+.principles-scene.principles-scene[data-reveal-ready="true"] .principle-card {
+  opacity: 1;
+  transform: none;
+  scale: 1;
+  rotate: 0deg;
+  clip-path: circle(72% at 50% 50%);
+  transform-origin: 50% 88%;
+  transition: none;
+}
+
+.principles-scene.principles-scene[data-reveal-ready="true"]
+  .principle-card:not([data-revealed="true"]) {
+  opacity: 0;
+  transform: none;
+  /* A clipped waiting card would shrink the observer's intersection area. */
+  clip-path: none;
+}
+
+.principles-scene.principles-scene[data-reveal-ready="true"]
+  .principle-card[data-revealed="true"] {
+  animation: principle-lens-unfold 1150ms var(--principles-ease)
+    var(--principle-delay, 0ms) both;
+}
+
+@keyframes principle-lens-unfold {
+  from {
+    opacity: 0;
+    clip-path: circle(16% at 50% 82%);
+    scale: 0.9 0.94;
+    rotate: var(--principle-start-angle, -3deg);
+  }
+  65% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    clip-path: circle(72% at 50% 50%);
+    scale: 1;
+    rotate: 0deg;
+  }
+}
+
+.principles-scene .principle-0 {
+  --principle-delay: 100ms;
+  --principle-start-angle: -3deg;
+}
+.principles-scene .principle-1 {
+  --principle-delay: 230ms;
+  --principle-start-angle: 2deg;
+}
+.principles-scene .principle-2 {
+  --principle-delay: 360ms;
+  --principle-start-angle: -2deg;
+}
+
+@media (max-width: 760px) {
+  .principles-scene :is(.principle-0, .principle-1, .principle-2) {
+    --principle-delay: 80ms;
+  }
+}
+
+:root[data-a11y-reduce-motion="true"]
+  .principles-scene[data-reveal-ready="true"]
+  :is(.principle-card, .principles-branch) {
+  opacity: 1 !important;
+  clip-path: none !important;
+  scale: none !important;
+  rotate: none !important;
+  transition: none !important;
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce), print {
+  .principles-scene[data-reveal-ready="true"]
+    :is(.principle-card, .principles-branch) {
+    opacity: 1 !important;
+    clip-path: none !important;
+    scale: none !important;
+    rotate: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}

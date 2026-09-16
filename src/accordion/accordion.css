@@ -1,0 +1,58 @@
+.animated-accordion .accordion-heading {
+  margin: 0;
+  font: inherit;
+}
+
+.animated-accordion .accordion-trigger {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.animated-accordion .accordion-title {
+  min-width: 0;
+}
+
+.animated-accordion .accordion-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 360ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 300ms ease-out;
+}
+
+.animated-accordion .accordion-item[data-open="true"] .accordion-panel {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.animated-accordion .accordion-panel-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.animated-accordion .accordion-icon {
+  flex-shrink: 0;
+  transition: transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.animated-accordion .accordion-item[data-open="true"] .accordion-icon {
+  transform: rotate(45deg);
+}
+
+:root[data-a11y-reduce-motion="true"] .animated-accordion .accordion-panel,
+:root[data-a11y-reduce-motion="true"] .animated-accordion .accordion-icon {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated-accordion .accordion-panel,
+  .animated-accordion .accordion-icon {
+    transition: none;
+  }
+}

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" fill="#FFFFFF" role="img" aria-labelledby="logo-title logo-desc">
+  <title id="logo-title">kodu — symbol</title>
+  <desc id="logo-desc">Kodu: two interlocking open arches. Original symbol; all lettering is outlined vector artwork.</desc>
+  <g transform="translate(0 0)">
+    <path d="M8 88V38C8 20 22 6 40 6S72 20 72 38V50H54V38C54 30 48 24 40 24S26 30 26 38V88Z"/>
+    <path d="M88 8V58C88 76 74 90 56 90S24 76 24 58V46H42V58C42 66 48 72 56 72S70 66 70 58V8Z"/>
+  </g>
+</svg>

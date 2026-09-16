@@ -1,0 +1,40 @@
+/* Rest poses remain the default. JavaScript only adds finite, cancellable
+   entrances; a delayed script or unavailable observer cannot hide the hero. */
+.hero-section[data-hero-motion] .hero-panels > span:first-child {
+  transform-origin: right center;
+}
+
+.hero-section[data-hero-motion] .hero-panels > span:last-child {
+  transform-origin: left center;
+}
+
+.hero-section[data-hero-motion] .hero-image > img {
+  transform-origin: 50% 70%;
+  transform: perspective(1100px)
+    translate3d(var(--hero-pointer-x, 0px), var(--hero-pointer-y, 0px), 0)
+    rotateX(var(--hero-pointer-rx, 0deg)) rotateY(var(--hero-pointer-ry, 0deg));
+}
+
+.hero-section[data-hero-motion] .hero-title-line {
+  transform-origin: left top;
+}
+
+/* Large display text can extend beyond its line box; masks exist only during
+   the entrance and are removed with the animation, so letters stay intact. */
+.hero-section[data-hero-motion="entering"] .hero-image > img {
+  will-change: transform, clip-path;
+}
+
+:root[data-a11y-reduce-motion="true"]
+  .hero-section[data-hero-motion]
+  .hero-image
+  > img {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce), print {
+  .hero-section[data-hero-motion] .hero-image > img {
+    transform: none;
+    clip-path: none;
+  }
+}

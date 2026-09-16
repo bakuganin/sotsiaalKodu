@@ -1,0 +1,78 @@
+.hero-house {
+  /* Keep the canvas anchored here even when responsive rules use position:static. */
+  contain: layout;
+}
+.hero-house > img {
+  opacity: 1;
+  transition: opacity 320ms ease;
+}
+.hero-house-stage {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 380ms ease;
+}
+.hero-house-stage canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.hero-house[data-scene-state="ready"] > img {
+  opacity: 0;
+}
+.hero-house[data-scene-state="ready"] .hero-house-stage {
+  opacity: 1;
+}
+.hero-house-replay {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 5px 12px;
+  border: 1px solid #57791d25;
+  border-radius: 20px;
+  color: var(--brand-forest);
+  background: #f7f8f2e6;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  white-space: nowrap;
+  pointer-events: auto;
+  cursor: pointer;
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease;
+}
+.hero-house-replay:hover {
+  background: #fff;
+  border-color: var(--brand-forest);
+}
+.hero-house-replay:focus-visible {
+  outline: 3px solid var(--brand-focus);
+  outline-offset: 4px;
+}
+@media (max-width: 760px) {
+  .hero-house-replay {
+    bottom: -8px;
+  }
+}
+:root[data-a11y-hide-images="true"] .hero-house-stage,
+:root[data-a11y-hide-images="true"] .hero-house-replay {
+  visibility: hidden;
+}
+.hero-house[data-scene-motion="reduced"] > img,
+.hero-house[data-scene-motion="reduced"] .hero-house-stage {
+  transition: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-house > img,
+  .hero-house-stage,
+  .hero-house-replay {
+    transition: none;
+  }
+}

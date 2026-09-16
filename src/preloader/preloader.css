@@ -1,0 +1,234 @@
+/* Inlined in the document head so the first painted frame is intentional. */
+:root {
+  --loader-background: #f7f5ec;
+  --loader-primary: #57791d;
+  --loader-secondary: #93b947;
+  --loader-shadow: #263711;
+  --loader-bark: #b6a38a;
+}
+
+#site-preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: none;
+  place-items: center;
+  overflow: hidden;
+  padding: 24px;
+  background: var(--loader-background);
+  opacity: 1;
+  visibility: visible;
+  isolation: isolate;
+  touch-action: none;
+  transition: opacity 650ms ease-in-out;
+}
+
+html:is([data-loader-state="loading"], [data-loader-state="leaving"])
+  #site-preloader {
+  display: grid;
+}
+
+html[data-loader-state="leaving"] #site-preloader {
+  opacity: 0;
+  pointer-events: none;
+}
+
+html[data-loader-state="ready"] #site-preloader {
+  display: none;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* The accessibility launcher is portalled outside the inert application root. */
+html[data-site-ready="false"] .a11y-launcher {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+#site-preloader .loader-illustration {
+  display: block;
+  flex: none;
+  width: 168px;
+  height: 168px;
+  max-width: 100%;
+  overflow: visible;
+}
+
+@media (min-width: 640px) {
+  #site-preloader .loader-illustration {
+    width: 240px;
+    height: 240px;
+  }
+}
+
+#site-preloader .loader-hand-wipe {
+  animation: loader-hand-reveal 600ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+#site-preloader .loader-soil-clump {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: loader-soil-settle 290ms cubic-bezier(0.2, 0.7, 0.25, 1) both;
+}
+
+#site-preloader .loader-soil-clump-one {
+  animation-delay: 450ms;
+}
+
+#site-preloader .loader-soil-clump-two {
+  animation-delay: 490ms;
+}
+
+#site-preloader .loader-soil-clump-three {
+  animation-delay: 530ms;
+}
+
+#site-preloader .loader-soil-clump-four {
+  animation-delay: 570ms;
+}
+
+#site-preloader .loader-soil-clump-five {
+  animation-delay: 610ms;
+}
+
+#site-preloader .loader-stem-draw {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 0;
+  animation: loader-stem-grow 550ms cubic-bezier(0.3, 0, 0.3, 1) 800ms both;
+}
+
+/* Every leaf unfolds from its exact junction with the stem. */
+#site-preloader .loader-leaf {
+  transform-box: view-box;
+}
+
+#site-preloader .loader-leaf-left {
+  transform-origin: 140px 125px;
+  animation: loader-leaf-left-unfold 500ms cubic-bezier(0.2, 0.7, 0.25, 1)
+    1150ms both;
+}
+
+#site-preloader .loader-leaf-right {
+  transform-origin: 139px 110px;
+  animation: loader-leaf-right-unfold 500ms cubic-bezier(0.2, 0.7, 0.25, 1)
+    1200ms both;
+}
+
+#site-preloader .loader-leaf-top {
+  transform-origin: 138px 87px;
+  animation: loader-leaf-top-unfold 550ms cubic-bezier(0.2, 0.7, 0.25, 1) 1550ms
+    both;
+}
+
+/* The completed sprout alone moves; its soil and supporting hand stay still. */
+#site-preloader .loader-plant {
+  transform-box: view-box;
+  transform-origin: 143px 171px;
+  animation: loader-plant-sway 3600ms ease-in-out 2400ms infinite;
+}
+
+@keyframes loader-hand-reveal {
+  from {
+    transform: translateX(-310px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes loader-soil-settle {
+  from {
+    opacity: 0;
+    transform: translateY(3px) scale(0.65);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes loader-stem-grow {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes loader-leaf-left-unfold {
+  from {
+    opacity: 0;
+    transform: rotate(38deg) scale(0.04, 0.2);
+  }
+  24% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+@keyframes loader-leaf-right-unfold {
+  from {
+    opacity: 0;
+    transform: rotate(-35deg) scale(0.04, 0.2);
+  }
+  24% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+@keyframes loader-leaf-top-unfold {
+  from {
+    opacity: 0;
+    transform: rotate(-18deg) scale(0.12, 0.06);
+  }
+  24% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+@keyframes loader-plant-sway {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  30% {
+    transform: rotate(1.2deg);
+  }
+  70% {
+    transform: rotate(-0.9deg);
+  }
+}
+
+html[data-loader-motion="reduced"] #site-preloader {
+  transition-duration: 150ms;
+}
+
+html[data-loader-motion="reduced"] #site-preloader *,
+html[data-loader-motion="reduced"] #site-preloader *::before,
+html[data-loader-motion="reduced"] #site-preloader *::after {
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #site-preloader {
+    transition-duration: 150ms;
+  }
+
+  #site-preloader *,
+  #site-preloader *::before,
+  #site-preloader *::after {
+    animation: none !important;
+  }
+}

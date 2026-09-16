@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.work/
+test-results*/
+playwright-report/
+*.log
+*.tsbuildinfo
+.env*
+!.env.example
+.vercel/
+.DS_Store
+
+# Local renders and experiments; keep the written design documentation.
+design/**
+!design/**/
+!design/**/*.md
