@@ -55,6 +55,8 @@ npm test
 
 Репозиторий: [bakuganin/sotsiaalKodu](https://github.com/bakuganin/sotsiaalKodu). Корень репозитория — сам сайт.
 
+Демонстрационная версия: [sotsiaal-kodu.vercel.app](https://sotsiaal-kodu.vercel.app). Проект Vercel подключён к GitHub; изменения в `main` публикуются автоматически. Предупреждение о разработке и демонстрационный режим записи остаются включены.
+
 Для Vercel настройки сохранены в `vercel.json`: Node.js 24, установка `npm ci`, сборка `npm run build`, результат в `dist`. Главная, `/services/` и `/team/` имеют отдельные HTML-файлы. Локальные рендеры, отчёты, кэш и файлы авторизации исключены из публикации.
 
 ## Контент и будущие пять языков
