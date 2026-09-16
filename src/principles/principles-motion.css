@@ -17,6 +17,7 @@
 .principles-scene[data-reveal-ready="true"]:not([data-branch-revealed="true"])
   .principles-branch {
   opacity: 0;
+  transition: none;
   rotate: -1.25deg;
   clip-path: polygon(
     116% 0,

@@ -3,10 +3,17 @@ import "./principles-motion.css";
 
 type PrinciplesSceneProps = {
   values: readonly { title: string; text: string }[];
+  paused: boolean;
 };
 
-export default function PrinciplesScene({ values }: PrinciplesSceneProps) {
+export default function PrinciplesScene({
+  values,
+  paused,
+}: PrinciplesSceneProps) {
   const sceneRef = useRef<HTMLDivElement>(null);
+  const pausedRef = useRef(paused);
+  pausedRef.current = paused;
+  const refreshRef = useRef<(() => void) | null>(null);
 
   useLayoutEffect(() => {
     const scene = sceneRef.current;
@@ -34,13 +41,6 @@ export default function PrinciplesScene({ values }: PrinciplesSceneProps) {
 
     const updateMotion = () => {
       if (disposed) return;
-      if (root.dataset.siteReady === "false") {
-        // Keep the first pose ready without consuming the entrance under the loader.
-        scene.dataset.revealReady = "true";
-        observer?.disconnect();
-        observer = undefined;
-        return;
-      }
       if (
         motionPreference.matches ||
         root.dataset.a11yReduceMotion === "true" ||
@@ -52,11 +52,23 @@ export default function PrinciplesScene({ values }: PrinciplesSceneProps) {
 
       const pending = cards.filter((card) => card.dataset.revealed !== "true");
       if (!pending.length) return;
+      if (pausedRef.current || root.dataset.siteReady === "false") {
+        // Prepare once, without consuming the entrance behind a modal.
+        scene.dataset.revealReady = "true";
+        observer?.disconnect();
+        observer = undefined;
+        return;
+      }
 
       observer?.disconnect();
       observer = new IntersectionObserver(
         (entries) => {
-          if (disposed || root.dataset.siteReady === "false") return;
+          if (
+            disposed ||
+            pausedRef.current ||
+            root.dataset.siteReady === "false"
+          )
+            return;
           entries.forEach((entry) => {
             if (entry.isIntersecting && entry.intersectionRatio >= 0.2) {
               scene.dataset.branchRevealed = "true";
@@ -81,10 +93,12 @@ export default function PrinciplesScene({ values }: PrinciplesSceneProps) {
     });
     motionPreference.addEventListener("change", updateMotion);
     window.addEventListener("site:ready", updateMotion, { once: true });
+    refreshRef.current = updateMotion;
     updateMotion();
 
     return () => {
       disposed = true;
+      refreshRef.current = null;
       observer?.disconnect();
       accessibilityObserver.disconnect();
       motionPreference.removeEventListener("change", updateMotion);
@@ -92,6 +106,10 @@ export default function PrinciplesScene({ values }: PrinciplesSceneProps) {
       delete scene.dataset.revealReady;
     };
   }, [values.length]);
+
+  useLayoutEffect(() => {
+    refreshRef.current?.();
+  }, [paused]);
 
   return (
     <div className="principles-scene" ref={sceneRef}>

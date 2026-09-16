@@ -28,6 +28,7 @@
 .intro-visual[data-reveal-ready="true"]:not([data-revealed="true"])
   :is(.intro-branch, .intro-portraits > *) {
   opacity: 0;
+  transition: none;
 }
 
 /* The tapered edge follows the branch, then each portrait opens from its base. */

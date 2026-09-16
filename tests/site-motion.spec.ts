@@ -6,6 +6,113 @@ test.use({ reducedMotion: "no-preference" });
 const cards = (page: Page) => page.locator(".services-grid .service-card");
 const booking = (page: Page) => page.locator("dialog.booking-dialog");
 
+type EntranceEvent = {
+  target: string;
+  effect: string;
+  noticeOpen: boolean;
+};
+
+declare global {
+  interface Window {
+    __entranceEvents: EntranceEvent[];
+  }
+}
+
+// Observe real browser starts, including the independent composition transitions.
+// Watching only data-motion or hero state misses entrances elsewhere on the page.
+async function auditEntrances(page: Page) {
+  await page.addInitScript(() => {
+    window.__entranceEvents = [];
+    const ids = new WeakMap<Element, number>();
+    let nextId = 0;
+    const record = (element: Element, effect: string) => {
+      if (!ids.has(element)) ids.set(element, ++nextId);
+      window.__entranceEvents.push({
+        target: `${element.tagName}.${element.className}:${ids.get(element)}`,
+        effect,
+        noticeOpen: !!document.querySelector("dialog.development-notice[open]"),
+      });
+    };
+    const animate = Element.prototype.animate;
+    Element.prototype.animate = function (...args) {
+      if (this.closest(".hero-section")) record(this, "hero-entrance");
+      return animate.apply(this, args);
+    };
+    document.addEventListener(
+      "animationstart",
+      (event) => {
+        if (
+          event.target instanceof Element &&
+          /^(site-|principle-)/.test(event.animationName)
+        )
+          record(event.target, event.animationName);
+      },
+      true,
+    );
+    document.addEventListener(
+      "transitionrun",
+      (event) => {
+        if (
+          event.target instanceof Element &&
+          event.target.matches(
+            ".intro-branch, .intro-portraits > *, .principles-branch",
+          )
+        )
+          record(event.target, `transition:${event.propertyName}`);
+      },
+      true,
+    );
+  });
+}
+
+async function dismissNoticeWithFrames(page: Page) {
+  return page.locator("dialog.development-notice").evaluate(async (element) => {
+    const dialog = element as HTMLDialogElement;
+    const frames: {
+      open: boolean;
+      starts: number;
+      opacity: number;
+      visiblePageBlocks: number;
+    }[] = [];
+    dialog
+      .querySelector<HTMLButtonElement>(".development-notice-continue")!
+      .click();
+    const started = performance.now();
+    do {
+      await new Promise<void>((resolve) =>
+        requestAnimationFrame(() => resolve()),
+      );
+      frames.push({
+        open: dialog.open,
+        starts: window.__entranceEvents.length,
+        opacity: Number(getComputedStyle(dialog).opacity),
+        visiblePageBlocks: [
+          ...document.querySelectorAll(
+            ".site-shell > header, .site-shell > main, .site-shell > footer",
+          ),
+        ].filter((block) => {
+          const style = getComputedStyle(block);
+          return (
+            style.visibility !== "hidden" &&
+            style.display !== "none" &&
+            Number(style.opacity) > 0
+          );
+        }).length,
+      });
+    } while (dialog.open && performance.now() - started < 5000);
+    return frames;
+  });
+}
+
+function expectNoRepeatedEntrances(events: EntranceEvent[]) {
+  const counts = new Map<string, number>();
+  for (const event of events) {
+    const key = `${event.target}/${event.effect}`;
+    counts.set(key, (counts.get(key) ?? 0) + 1);
+  }
+  expect([...counts].filter(([, count]) => count > 1)).toEqual([]);
+}
+
 async function expectSettled(target: Locator) {
   await expect(target).toHaveAttribute("data-motion-state", "settled");
   await expect(target).toHaveCSS("opacity", "1");
@@ -192,6 +299,7 @@ test("without IntersectionObserver every scene remains readable and usable", asy
 }) => {
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
+  await auditEntrances(page);
   await page.addInitScript(() => {
     Object.defineProperty(window, "IntersectionObserver", { value: undefined });
   });
@@ -216,6 +324,23 @@ test("without IntersectionObserver every scene remains readable and usable", asy
   await expect(
     page.getByRole("dialog", { name: "Помощь на дому", exact: true }),
   ).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.locator("dialog.content-dialog")).not.toBeVisible();
+  await page.locator(".hero-actions .pill-button").click();
+  await expect(booking(page)).toBeVisible();
+  // The static fallback must stay final when an overlay pauses the page.
+  // Covers the longest lens delay so a reintroduced CSS entrance is observed.
+  await page.waitForTimeout(600);
+  expect(
+    await page.evaluate(() =>
+      window.__entranceEvents.filter(
+        ({ effect }) => effect === "principle-lens-unfold",
+      ),
+    ),
+  ).toEqual([]);
+  await expect(
+    page.locator('.principle-card[data-revealed="true"]'),
+  ).toHaveCount(3);
   expect(errors).toEqual([]);
 });
 
@@ -304,6 +429,92 @@ test("normal motion fits narrow screens during home and internal-page reveals", 
 test.describe("first visit", () => {
   test.use({ developmentNotice: "first-visit" });
 
+  for (const path of ["/", "/#about", "/#team", "/services/"]) {
+    test(`all page entrances wait through the full development notice exit: ${path}`, async ({
+      page,
+    }, testInfo) => {
+      await page.setViewportSize({ width: 1440, height: 1200 });
+      await auditEntrances(page);
+      await page.goto(path);
+      const notice = page.locator("dialog.development-notice");
+      await expect(notice).toHaveCSS("opacity", "1");
+      for (const block of [
+        ".site-shell > header",
+        ".site-shell > main",
+        ".site-shell > footer",
+      ])
+        await expect(page.locator(block)).not.toBeVisible();
+      // Covers delayed image decode, independent observers, and CSS preparation.
+      await page.waitForTimeout(1400);
+      const before = await page.evaluate(() => window.__entranceEvents);
+      await testInfo.attach("entrances-behind-notice", {
+        body: JSON.stringify(before),
+        contentType: "application/json",
+      });
+      expect(before).toEqual([]);
+      if (path === "/#about")
+        await expect(page.locator(".intro-visual")).not.toHaveAttribute(
+          "data-revealed",
+          "true",
+        );
+
+      const closing = await dismissNoticeWithFrames(page);
+      expect(
+        closing.some(({ open, opacity }) => open && opacity > 0 && opacity < 1),
+      ).toBe(true);
+      expect(
+        closing.filter(({ open }) => open).every(({ starts }) => starts === 0),
+      ).toBe(true);
+      expect(
+        closing
+          .filter(({ open }) => open)
+          .every(({ visiblePageBlocks }) => visiblePageBlocks === 0),
+      ).toBe(true);
+      await expect(notice).not.toBeVisible();
+      for (const block of [
+        ".site-shell > header",
+        ".site-shell > main",
+        ".site-shell > footer",
+      ])
+        await expect(page.locator(block)).toBeVisible();
+      await page.waitForTimeout(2000);
+      const after = await page.evaluate(() => window.__entranceEvents);
+      expect(after.every(({ noticeOpen }) => !noticeOpen)).toBe(true);
+      if (path !== "/#team") expect(after.length).toBeGreaterThan(0);
+      expectNoRepeatedEntrances(after);
+    });
+  }
+
+  test("a restored principles viewport waits for the notice and each lens opens once", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1440, height: 1200 });
+    await auditEntrances(page);
+    await page.goto("/");
+    const scene = page.locator(".principles-scene");
+    await expect(page.locator("dialog.development-notice")).toHaveCSS(
+      "opacity",
+      "1",
+    );
+    await scene.evaluate((element) =>
+      element.scrollIntoView({ block: "center", behavior: "instant" }),
+    );
+    await page.waitForTimeout(1400);
+    expect(await page.evaluate(() => window.__entranceEvents)).toEqual([]);
+    await expect(scene.locator('[data-revealed="true"]')).toHaveCount(0);
+    const closing = await dismissNoticeWithFrames(page);
+    expect(
+      closing.filter(({ open }) => open).every(({ starts }) => starts === 0),
+    ).toBe(true);
+    await expect(scene.locator('[data-revealed="true"]')).toHaveCount(3);
+    await page.waitForTimeout(1800);
+    const events = await page.evaluate(() => window.__entranceEvents);
+    expect(
+      events.filter(({ effect }) => effect === "principle-lens-unfold"),
+    ).toHaveLength(3);
+    expectNoRepeatedEntrances(events);
+  });
+
   test("hero waits for the notice, then reveals the original image with depth and a curved mask", async ({
     page,
   }, testInfo) => {
@@ -378,5 +589,48 @@ test.describe("first visit", () => {
     await expect(page.locator("#site-preloader, canvas")).toHaveCount(0);
     await hero.locator(".hero-actions .pill-button").click();
     await expect(booking(page)).toBeVisible();
+  });
+
+  test("hero entrance does not replay after booking or service dialogs close", async ({
+    page,
+  }) => {
+    await auditEntrances(page);
+    await page.goto("/");
+    await expect(page.locator("dialog.development-notice")).toHaveCSS(
+      "opacity",
+      "1",
+    );
+    await dismissNoticeWithFrames(page);
+    const hero = page.locator(".hero-section");
+    await expect(hero).toHaveAttribute("data-hero-motion", "ready");
+    const entrance = await page.evaluate(() =>
+      window.__entranceEvents.filter(
+        ({ effect }) => effect === "hero-entrance",
+      ),
+    );
+    expect(entrance.length).toBeGreaterThan(5);
+    expectNoRepeatedEntrances(entrance);
+
+    await hero.locator(".hero-actions .pill-button").click();
+    await expect(booking(page)).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(booking(page)).not.toBeVisible();
+    await hero.locator(".hero-shortcut").first().click();
+    const service = page.getByRole("dialog", {
+      name: "Помощь на дому",
+      exact: true,
+    });
+    await expect(service).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(service).not.toBeVisible();
+    await page.waitForTimeout(1500);
+    expect(
+      await page.evaluate(() =>
+        window.__entranceEvents.filter(
+          ({ effect }) => effect === "hero-entrance",
+        ),
+      ),
+    ).toEqual(entrance);
+    await expect(hero).toHaveAttribute("data-hero-motion", "ready");
   });
 });

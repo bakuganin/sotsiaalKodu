@@ -23,6 +23,7 @@ import PrinciplesScene from "./principles/PrinciplesScene";
 import IntroComposition from "./motion/IntroComposition";
 import useSiteMotion from "./motion/useSiteMotion";
 import useHeroMotion from "./motion/useHeroMotion";
+import { usePageMotionGate } from "./motion/PageMotion";
 import { AnimatedAccordion } from "./accordion/AnimatedAccordion";
 import AccessibilityWidget from "./accessibility/AccessibilityWidget";
 import { BrandArtwork } from "./brand/BrandArtwork";
@@ -81,12 +82,13 @@ export default function App() {
   const service = t.services.find((item) => hash === `#/services/${item.id}`);
   const privacyOpen = hash === "#/privacy";
   const unknownPage = hash.startsWith("#/") && !service && !privacyOpen;
-  const motionPaused =
+  const motionPaused = usePageMotionGate(
     developmentNoticeOpen ||
-    bookingOpen ||
-    !!service ||
-    privacyOpen ||
-    unknownPage;
+      bookingOpen ||
+      !!service ||
+      privacyOpen ||
+      unknownPage,
+  );
   useSiteMotion(siteRef, page, motionPaused);
   useHeroMotion(heroRef, motionPaused);
 
@@ -176,7 +178,11 @@ export default function App() {
   }
 
   return (
-    <div className="site-shell" ref={siteRef}>
+    <div
+      className="site-shell"
+      ref={siteRef}
+      data-startup-pending={developmentNoticeOpen}
+    >
       <a className="skip-link" href="#main">
         {t.header.skip}
       </a>
@@ -294,7 +300,7 @@ export default function App() {
                       </div>
                     ))}
                   </div>
-                  <IntroComposition>
+                  <IntroComposition paused={motionPaused}>
                     <div className="intro-portraits">
                       <img
                         className="intro-portrait-eduard"
@@ -418,7 +424,10 @@ export default function App() {
                   </h2>
                   <p>{t.calm.valuesDescription}</p>
                 </div>
-                <PrinciplesScene values={t.about.values} />
+                <PrinciplesScene
+                  values={t.about.values}
+                  paused={motionPaused}
+                />
               </section>
 
               <section

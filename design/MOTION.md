@@ -11,7 +11,7 @@ The home, services and team pages share a finite, viewport-driven motion system.
 - Story photos: rounded aperture plus a small lens-like zoom settling into the original crop.
 - Process, FAQ and contact rows: horizontal rule reveals; existing accordion and modal open/close behavior remains accessible.
 - Team: gallery aperture and shallow unfolding of active profiles. The tall mobile gallery uses no perspective to avoid overflow with enlarged text.
-- Contact spread: opposing panels open around the seam. Footer elements finish with short ruled reveals.
+- Contact spread: opposing rounded masks open around the seam with gradual opacity; panel geometry stays fixed throughout the reveal. Footer elements finish with short ruled reveals.
 
 ## Reuse
 
@@ -19,7 +19,9 @@ The home, services and team pages share a finite, viewport-driven motion system.
 
 The controller owns `data-motion-state`: `pending`, `running`, `settled`. Default markup is fully visible; pending poses are installed only when the observer works. Completion removes animation styles; a bounded fallback settles even if animation events are missing. Elements animate once per route mount, and observers/listeners/timers are removed on route changes.
 
-Hero starts after the development notice is acknowledged. Focus and anchor navigation reveal target content immediately. Opening dialogs settles ongoing entrances and postpones new ones. Both OS and website reduced-motion preferences take effect live, revealing content and disabling added motion. Missing IntersectionObserver leaves the complete page visible.
+The development notice hides page content while retaining its layout. All entrance controllers, including the intro and principles scenes, share a gate that waits until the notice has fully closed. The gate also respects native dialog state throughout other modal exit transitions. Preparing a botanical scene's hidden pose never creates a transition. Completed entrances are preserved when dialogs open and close.
+
+Focus and anchor navigation reveal target content immediately. Opening dialogs settles ongoing hero and shared entrances and postpones new ones. Both OS and website reduced-motion preferences take effect live, revealing static content and disabling added motion even while a dialog is open. Missing IntersectionObserver leaves the complete page visible after the startup notice closes.
 
 Timings and curves are in `src/motion/site-motion.css`, hero choreography in `useHeroMotion.ts`, botanical scenes in their dedicated files. No external animation dependency was added.
 

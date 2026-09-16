@@ -1,0 +1,5 @@
+/* Preserve layout/anchor positions, but reveal no page content under the notice. */
+.site-shell[data-startup-pending="true"] > :not(dialog),
+.site-shell[data-startup-pending="true"] > :not(dialog) * {
+  visibility: hidden !important;
+}

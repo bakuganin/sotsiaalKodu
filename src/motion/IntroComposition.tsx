@@ -1,8 +1,14 @@
 import { useLayoutEffect, useRef, type PropsWithChildren } from "react";
 import "./intro-composition.css";
 
-export default function IntroComposition({ children }: PropsWithChildren) {
+export default function IntroComposition({
+  children,
+  paused,
+}: PropsWithChildren<{ paused: boolean }>) {
   const sceneRef = useRef<HTMLDivElement>(null);
+  const pausedRef = useRef(paused);
+  pausedRef.current = paused;
+  const refreshRef = useRef<(() => void) | null>(null);
 
   useLayoutEffect(() => {
     const scene = sceneRef.current;
@@ -15,6 +21,7 @@ export default function IntroComposition({ children }: PropsWithChildren) {
     let observer: IntersectionObserver | undefined;
     let decodeTimeout: ReturnType<typeof setTimeout> | undefined;
     let requested = false;
+    let imagesReady = false;
     let disposed = false;
 
     const reveal = () => {
@@ -26,6 +33,7 @@ export default function IntroComposition({ children }: PropsWithChildren) {
     const prepareImagesAndReveal = async () => {
       if (
         disposed ||
+        pausedRef.current ||
         root.dataset.siteReady === "false" ||
         requested ||
         scene.dataset.revealed === "true"
@@ -46,18 +54,12 @@ export default function IntroComposition({ children }: PropsWithChildren) {
         }),
       ]);
       clearTimeout(decodeTimeout);
-      if (!disposed) reveal();
+      imagesReady = true;
+      if (!disposed && !pausedRef.current) reveal();
     };
 
     const updateMotion = () => {
       if (disposed) return;
-      if (root.dataset.siteReady === "false") {
-        // Keep the first pose ready without consuming the entrance under the loader.
-        scene.dataset.revealReady = "true";
-        observer?.disconnect();
-        observer = undefined;
-        return;
-      }
       if (
         motionPreference.matches ||
         root.dataset.a11yReduceMotion === "true" ||
@@ -66,7 +68,18 @@ export default function IntroComposition({ children }: PropsWithChildren) {
         reveal();
         return;
       }
-      if (requested || scene.dataset.revealed === "true") return;
+      if (scene.dataset.revealed === "true") return;
+      if (pausedRef.current || root.dataset.siteReady === "false") {
+        // Prepare once, without consuming the entrance behind a modal.
+        scene.dataset.revealReady = "true";
+        observer?.disconnect();
+        observer = undefined;
+        return;
+      }
+      if (requested) {
+        if (imagesReady) reveal();
+        return;
+      }
 
       scene.dataset.revealReady = "true";
       observer?.disconnect();
@@ -93,10 +106,12 @@ export default function IntroComposition({ children }: PropsWithChildren) {
     });
     motionPreference.addEventListener("change", updateMotion);
     window.addEventListener("site:ready", updateMotion, { once: true });
+    refreshRef.current = updateMotion;
     updateMotion();
 
     return () => {
       disposed = true;
+      refreshRef.current = null;
       clearTimeout(decodeTimeout);
       observer?.disconnect();
       accessibilityObserver.disconnect();
@@ -105,6 +120,10 @@ export default function IntroComposition({ children }: PropsWithChildren) {
       delete scene.dataset.revealReady;
     };
   }, []);
+
+  useLayoutEffect(() => {
+    refreshRef.current?.();
+  }, [paused]);
 
   return (
     <div className="intro-visual" aria-hidden="true" ref={sceneRef}>

@@ -86,14 +86,14 @@
 [data-motion="pair"][data-motion-state="pending"] > * {
   opacity: 0;
 }
+/* Keep the panel edges and their contents in place. Projecting these large
+   surfaces in 3D enlarged them beyond the viewport before snapping back. */
 [data-motion="pair"][data-motion-state="running"] > * {
-  animation: site-page-left 1300ms var(--motion-unfold) both;
-  transform-origin: 100% 50%;
+  animation: site-page-left 1150ms var(--motion-organic) both;
 }
 [data-motion="pair"][data-motion-state="running"] > :last-child {
   animation-name: site-page-right;
-  animation-delay: 100ms;
-  transform-origin: 0 50%;
+  animation-delay: 80ms;
 }
 
 @keyframes site-typeset {
@@ -190,30 +190,20 @@
 @keyframes site-page-left {
   from {
     opacity: 0;
-    transform: perspective(1800px) rotateY(9deg);
-    clip-path: inset(6% 0 6% 3% round 48px);
-  }
-  24% {
-    opacity: 1;
+    clip-path: inset(2% 0 2% 6% round 48px);
   }
   to {
     opacity: 1;
-    transform: none;
     clip-path: inset(0 round 0);
   }
 }
 @keyframes site-page-right {
   from {
     opacity: 0;
-    transform: perspective(1800px) rotateY(-9deg);
-    clip-path: inset(6% 3% 6% 0 round 48px);
-  }
-  24% {
-    opacity: 1;
+    clip-path: inset(2% 6% 2% 0 round 48px);
   }
   to {
     opacity: 1;
-    transform: none;
     clip-path: inset(0 round 0);
   }
 }
