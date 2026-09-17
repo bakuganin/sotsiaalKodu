@@ -47,12 +47,47 @@
   box-shadow: 0 20px 80px #0004;
   overscroll-behavior: contain;
   scrollbar-gutter: stable;
+  opacity: 0;
+  transform: translateY(14px) scale(0.985);
+  transform-origin: left bottom;
+  transition:
+    opacity 260ms cubic-bezier(0.4, 0, 0.8, 0.3),
+    transform 260ms cubic-bezier(0.4, 0, 0.8, 0.3);
+}
+.a11y-dialog[data-visible="true"] {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 .a11y-dialog::backdrop {
   background: #0b100d66;
+  opacity: 0;
+  transition: opacity 260ms ease;
+}
+.a11y-dialog[data-visible="true"]::backdrop {
+  opacity: 1;
+  transition-duration: 320ms;
 }
 html:has(.a11y-dialog[open]) {
   overflow: hidden;
+}
+html[data-a11y-reduce-motion="true"] .a11y-dialog,
+html[data-a11y-reduce-motion="true"] .a11y-dialog::backdrop {
+  transition: none;
+}
+html[data-a11y-reduce-motion="true"] .a11y-dialog {
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .a11y-dialog[data-visible],
+  .a11y-dialog[data-visible]::backdrop {
+    transition: none;
+  }
+  .a11y-dialog {
+    transform: none;
+  }
 }
 .a11y-panel {
   min-width: 0;

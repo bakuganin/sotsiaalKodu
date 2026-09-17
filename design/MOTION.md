@@ -12,6 +12,8 @@ The home, services and team pages share a finite, viewport-driven motion system.
 - Process, FAQ and contact rows: horizontal rule reveals; existing accordion and modal open/close behavior remains accessible.
 - Team: gallery aperture and shallow unfolding of active profiles. The tall mobile gallery uses no perspective to avoid overflow with enlarged text.
 - Contact spread: opposing rounded masks open around the seam with gradual opacity; panel geometry stays fixed throughout the reveal. Footer elements finish with short ruled reveals.
+- Desktop services: mouse hover opens the menu; the trigger-to-panel area stays continuous, with a 160ms grace period before a soft exit. Keyboard disclosure, Escape, outside dismissal and touch navigation retain their behavior.
+- Accessibility panel: a short entrance from the launcher corner and fading backdrop; the native dialog stays open through its exit, retaining focus and scroll lock. Reduced motion removes the transition and closes immediately.
 
 ## Reuse
 

@@ -10,9 +10,15 @@ import {
 } from "./preferences";
 import { accessibilityCopy as copy } from "./ru";
 
+const CLOSE_FALLBACK_MS = 340;
+const prefersReducedMotion = () =>
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+  document.documentElement.dataset.a11yReduceMotion === "true";
+
 export default function AccessibilityWidget() {
   const [preferences, setPreferences] = useState(readPreferences);
   const [isOpen, setIsOpen] = useState(false);
+  const [visible, setVisible] = useState(false);
   const [launcherHost, setLauncherHost] = useState<HTMLElement>(document.body);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const launcherRef = useRef<HTMLButtonElement>(null);
@@ -20,6 +26,9 @@ export default function AccessibilityWidget() {
   const guideRef = useRef<HTMLDivElement>(null);
   const sourceModalRef = useRef<HTMLDialogElement | null>(null);
   const restoreFrame = useRef<number | null>(null);
+  const enterFrame = useRef<number | null>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const closing = useRef(false);
   const id = useId();
   const dialogId = `${id}-dialog`;
   const headingId = `${id}-heading`;
@@ -37,8 +46,18 @@ export default function AccessibilityWidget() {
     writePreferences(preferences);
   }, [preferences]);
 
+  const clearMotion = useCallback(() => {
+    if (enterFrame.current !== null) cancelAnimationFrame(enterFrame.current);
+    if (closeTimer.current !== null) clearTimeout(closeTimer.current);
+    enterFrame.current = null;
+    closeTimer.current = null;
+  }, []);
+
   const finishClosing = useCallback(() => {
     if (dialogRef.current?.open) return;
+    clearMotion();
+    closing.current = false;
+    setVisible(false);
     setIsOpen(false);
     sourceModalRef.current = null;
     if (restoreFrame.current !== null)
@@ -50,19 +69,48 @@ export default function AccessibilityWidget() {
       }
       restoreFrame.current = null;
     });
-  }, []);
+  }, [clearMotion]);
 
   const closePanel = useCallback(() => {
-    if (dialogRef.current?.open) dialogRef.current.close();
-  }, []);
+    const dialog = dialogRef.current;
+    if (!dialog?.open || closing.current) return;
+    clearMotion();
+    closing.current = true;
+    setVisible(false);
+    // An interrupted, still invisible entrance has nothing left to animate.
+    if (
+      prefersReducedMotion() ||
+      Number(getComputedStyle(dialog).opacity) < 0.01
+    ) {
+      dialog.close();
+      return;
+    }
+    closeTimer.current = setTimeout(() => {
+      if (closing.current && dialog.open) dialog.close();
+    }, CLOSE_FALLBACK_MS);
+  }, [clearMotion]);
 
   useEffect(() => {
-    const dialog = dialogRef.current;
-    if (isOpen && dialog && !dialog.open) {
-      dialog.showModal();
-      closeRef.current?.focus({ preventScroll: true });
-    }
-  }, [isOpen]);
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const settleMotion = () => {
+      const dialog = dialogRef.current;
+      if (!dialog?.open || !prefersReducedMotion()) return;
+      clearMotion();
+      if (closing.current) dialog.close();
+      else setVisible(true);
+    };
+    const observer = new MutationObserver(settleMotion);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-a11y-reduce-motion"],
+    });
+    motionQuery.addEventListener("change", settleMotion);
+    return () => {
+      observer.disconnect();
+      motionQuery.removeEventListener("change", settleMotion);
+      clearMotion();
+    };
+  }, [clearMotion]);
 
   useEffect(() => {
     // A button in the document body is inert while another modal is open.
@@ -174,8 +222,38 @@ export default function AccessibilityWidget() {
   }, [preferences.readingGuide, isOpen, launcherHost]);
 
   function openPanel() {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
     window.dispatchEvent(new CustomEvent("kodu:accessibility-open"));
-    sourceModalRef.current = launcherRef.current?.closest("dialog") ?? null;
+    clearMotion();
+    if (restoreFrame.current !== null) {
+      cancelAnimationFrame(restoreFrame.current);
+      restoreFrame.current = null;
+    }
+    closing.current = false;
+    // Opening settings may synchronously dismiss navigation before its launcher
+    // portal has moved. Only a still-open modal is an actual source to restore.
+    const sourceModal = launcherRef.current?.closest("dialog");
+    sourceModalRef.current =
+      sourceModal?.open && sourceModal.isConnected ? sourceModal : null;
+    if (dialog.open) {
+      setVisible(true);
+    } else {
+      setVisible(false);
+      dialog.showModal();
+      if (prefersReducedMotion()) {
+        setVisible(true);
+      } else {
+        // Paint the hidden top-layer state before starting the entrance.
+        enterFrame.current = requestAnimationFrame(() => {
+          enterFrame.current = requestAnimationFrame(() => {
+            enterFrame.current = null;
+            if (dialog.open && !closing.current) setVisible(true);
+          });
+        });
+      }
+    }
+    closeRef.current?.focus({ preventScroll: true });
     setIsOpen(true);
   }
 
@@ -210,9 +288,20 @@ export default function AccessibilityWidget() {
           ref={dialogRef}
           id={dialogId}
           className="a11y-dialog"
+          data-visible={visible}
           aria-labelledby={headingId}
           aria-describedby={descriptionId}
           onClose={finishClosing}
+          onTransitionEnd={(event) => {
+            if (
+              event.target === event.currentTarget &&
+              event.propertyName === "opacity" &&
+              closing.current &&
+              Number(getComputedStyle(event.currentTarget).opacity) < 0.01
+            ) {
+              event.currentTarget.close();
+            }
+          }}
           onCancel={(event) => {
             event.preventDefault();
             closePanel();

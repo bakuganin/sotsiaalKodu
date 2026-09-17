@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { MouseEvent } from "react";
 import {
   ArrowRight,
@@ -15,6 +15,7 @@ import "./navigation.css";
 
 const t = getContent();
 const MENU_CLOSE_MS = 300;
+const HOVER_LEAVE_MS = 160;
 
 type SiteHeaderProps = {
   page: "home" | "services" | "team";
@@ -66,6 +67,8 @@ export default function SiteHeader({
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const servicesRef = useRef<HTMLDivElement>(null);
   const servicesButton = useRef<HTMLButtonElement>(null);
+  const hoverCloseTimer = useRef<number | undefined>(undefined);
+  const openedByHover = useRef(false);
   const mobileDialog = useRef<HTMLDialogElement>(null);
   const mobileToggle = useRef<HTMLButtonElement>(null);
   const closeTimer = useRef<number | undefined>(undefined);
@@ -77,6 +80,55 @@ export default function SiteHeader({
   const navHref = (id: string) => (id === "team" ? "/team/" : `/#${id}`);
   const isActive = (id: string) =>
     page === "home" ? activeSection === id : page === id;
+
+  const clearHoverClose = useCallback(() => {
+    window.clearTimeout(hoverCloseTimer.current);
+    hoverCloseTimer.current = undefined;
+  }, []);
+
+  const closeMegaMenu = useCallback(() => {
+    clearHoverClose();
+    openedByHover.current = false;
+    setMegaOpen(false);
+  }, [clearHoverClose]);
+
+  function openOnHover(pointerType: string) {
+    if (
+      pointerType !== "mouse" ||
+      !window.matchMedia("(hover: hover) and (pointer: fine)").matches ||
+      document.querySelector("dialog[open]")
+    )
+      return;
+    clearHoverClose();
+    if (!megaOpen) openedByHover.current = true;
+    setMegaOpen(true);
+  }
+
+  function closeAfterHover(pointerType: string) {
+    if (pointerType !== "mouse") return;
+    clearHoverClose();
+    // Briefly crossing an edge should not flicker the menu. Keyboard users can
+    // keep reading its links even if they move the pointer away.
+    hoverCloseTimer.current = window.setTimeout(() => {
+      hoverCloseTimer.current = undefined;
+      const focusedLink = servicesRef.current
+        ?.querySelector(".sk-mega-menu")
+        ?.contains(document.activeElement);
+      if (!focusedLink) closeMegaMenu();
+    }, HOVER_LEAVE_MS);
+  }
+
+  function toggleMegaMenu(event: MouseEvent<HTMLButtonElement>) {
+    clearHoverClose();
+    // A mouse click immediately following hover confirms the open menu. A
+    // subsequent click, or keyboard activation, still toggles the disclosure.
+    if (event.detail > 0 && openedByHover.current) {
+      openedByHover.current = false;
+      return;
+    }
+    openedByHover.current = false;
+    setMegaOpen((open) => !open);
+  }
 
   function finishMobileClose() {
     if (closeTimer.current !== undefined)
@@ -111,7 +163,7 @@ export default function SiteHeader({
   function openMobile() {
     const dialog = mobileDialog.current;
     if (!dialog || dialog.open) return;
-    setMegaOpen(false);
+    closeMegaMenu();
     closingMobile.current = false;
     setMobileOpen(true);
     dialog.showModal();
@@ -152,23 +204,21 @@ export default function SiteHeader({
   }, []);
 
   useEffect(() => {
-    setMegaOpen(false);
-  }, [page, activeSection]);
+    closeMegaMenu();
+  }, [page, activeSection, closeMegaMenu]);
 
   useEffect(() => {
     if (!megaOpen) return;
     const onPointer = (event: PointerEvent) => {
-      if (!servicesRef.current?.contains(event.target as Node))
-        setMegaOpen(false);
+      if (!servicesRef.current?.contains(event.target as Node)) closeMegaMenu();
     };
     const onFocus = (event: FocusEvent) => {
-      if (!servicesRef.current?.contains(event.target as Node))
-        setMegaOpen(false);
+      if (!servicesRef.current?.contains(event.target as Node)) closeMegaMenu();
     };
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         event.preventDefault();
-        setMegaOpen(false);
+        closeMegaMenu();
         servicesButton.current?.focus({ preventScroll: true });
       }
     };
@@ -180,11 +230,11 @@ export default function SiteHeader({
       document.removeEventListener("focusin", onFocus);
       document.removeEventListener("keydown", onKey);
     };
-  }, [megaOpen]);
+  }, [megaOpen, closeMegaMenu]);
 
   useEffect(() => {
     const closeOverlays = () => {
-      setMegaOpen(false);
+      closeMegaMenu();
       closeMobile(undefined, true);
     };
     const onResize = () => {
@@ -193,7 +243,7 @@ export default function SiteHeader({
         getComputedStyle(mobileToggle.current).display === "none"
       )
         closeMobile(undefined, true);
-      else setMegaOpen(false);
+      else closeMegaMenu();
     };
     window.addEventListener("kodu:accessibility-open", closeOverlays);
     window.addEventListener("resize", onResize);
@@ -210,8 +260,9 @@ export default function SiteHeader({
         window.clearTimeout(closeTimer.current);
       if (openingFrame.current !== undefined)
         cancelAnimationFrame(openingFrame.current);
+      clearHoverClose();
     };
-  }, []);
+  }, [clearHoverClose, closeMegaMenu]);
 
   return (
     <header
@@ -224,17 +275,24 @@ export default function SiteHeader({
           className="sk-desktop-nav"
           aria-label={t.common.mainNavigation}
         >
-          <div className="sk-services-nav" ref={servicesRef}>
+          <div
+            className="sk-services-nav"
+            ref={servicesRef}
+            onPointerEnter={(event) => openOnHover(event.pointerType)}
+            onPointerLeave={(event) => closeAfterHover(event.pointerType)}
+          >
             <button
               ref={servicesButton}
               className="sk-nav-link sk-services-trigger"
               aria-expanded={megaOpen}
               aria-controls="services-mega-menu"
               data-active={isActive("services")}
-              onClick={() => setMegaOpen(!megaOpen)}
+              onClick={toggleMegaMenu}
               onKeyDown={(event) => {
                 if (event.key === "ArrowDown") {
                   event.preventDefault();
+                  clearHoverClose();
+                  openedByHover.current = false;
                   setMegaOpen(true);
                   requestAnimationFrame(() =>
                     servicesRef.current
@@ -260,7 +318,7 @@ export default function SiteHeader({
                     className="sk-mega-card"
                     key={service.id}
                     href={`/services/#${service.id}`}
-                    onClick={() => setMegaOpen(false)}
+                    onClick={closeMegaMenu}
                   >
                     <div className="sk-mega-card-top">
                       <span className="sk-mega-number">{service.number}</span>
@@ -281,7 +339,7 @@ export default function SiteHeader({
                 <a
                   className="sk-all-services"
                   href="/services/"
-                  onClick={() => setMegaOpen(false)}
+                  onClick={closeMegaMenu}
                 >
                   {t.common.allServices}
                   <ArrowRight size={19} aria-hidden="true" />
@@ -290,7 +348,7 @@ export default function SiteHeader({
                 <button
                   className="sk-mega-book"
                   onClick={() => {
-                    setMegaOpen(false);
+                    closeMegaMenu();
                     onBook();
                   }}
                 >
@@ -313,7 +371,7 @@ export default function SiteHeader({
                     : "location"
                   : undefined
               }
-              onClick={() => setMegaOpen(false)}
+              onClick={closeMegaMenu}
             >
               {item.label}
             </a>
