@@ -501,7 +501,7 @@ export default function App() {
                 />
               </section>
 
-              <TeamSection onBook={() => openBooking()} />
+              <TeamSection />
 
               <section id="events" className="events-section container">
                 <div className="section-rail" data-motion="heading">

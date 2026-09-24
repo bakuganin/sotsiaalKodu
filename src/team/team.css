@@ -634,3 +634,62 @@ html[data-a11y-reduce-motion="true"]
   svg {
   translate: none;
 }
+
+.team-preview {
+  background: #f4f4f0;
+  padding-block: clamp(56px, 6vw, 88px);
+}
+.team-preview-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(32px, 7vw, 100px);
+  align-items: center;
+}
+.team-preview h2 {
+  max-width: 560px;
+  font-family: var(--heading);
+  font-size: clamp(2.25rem, 4vw, 3.5rem);
+  letter-spacing: -0.045em;
+  line-height: 1.08;
+  margin: 0 0 32px;
+}
+.team-preview-lead {
+  color: var(--ink);
+  font-size: 1.125rem;
+  line-height: 1.65;
+  margin: 0 0 24px;
+}
+.team-preview-topics {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.team-preview-topics li {
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr);
+  gap: 16px;
+  padding: 16px 0;
+  border-top: 1px solid #26371126;
+}
+.team-preview-number {
+  color: var(--brand-hover);
+  font-size: 0.8rem;
+  padding-top: 4px;
+}
+.team-preview-topics h3 {
+  font-size: 1.125rem;
+  margin: 0 0 5px;
+}
+.team-preview-topics p {
+  color: #606955;
+  margin: 0;
+  line-height: 1.6;
+}
+@media (max-width: 760px) {
+  .team-preview-layout {
+    grid-template-columns: 1fr;
+  }
+  .team-preview .pill-button {
+    max-width: 100%;
+  }
+}

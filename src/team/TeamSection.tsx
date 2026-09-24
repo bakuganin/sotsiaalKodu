@@ -177,18 +177,39 @@ export function TeamGallery({
   );
 }
 
-export default function TeamSection({ onBook }: { onBook: () => void }) {
+export default function TeamSection() {
   return (
-    <section id="team" className="team-section" aria-labelledby="team-title">
-      <div className="container">
-        <div className="team-heading" data-motion="heading">
+    <section id="team" className="team-preview" aria-labelledby="team-title">
+      <div className="container team-preview-layout">
+        <div data-motion="heading">
           <p className="team-eyebrow">
             <Flower2 size={14} aria-hidden="true" />
-            {t.teamSection.eyebrow}
+            {t.teamPreview.eyebrow}
           </p>
-          <h2 id="team-title">{t.teamSection.title}</h2>
+          <h2 id="team-title">{t.teamPreview.title}</h2>
+          <a className="pill-button" href="/team/">
+            <span>{t.teamPreview.action}</span>
+            <span className="pill-arrow">
+              <ArrowUpRight size={22} aria-hidden="true" />
+            </span>
+          </a>
         </div>
-        <TeamGallery onBook={onBook} />
+        <div className="team-preview-details" data-motion="copy">
+          <p className="team-preview-lead">{t.teamPreview.description}</p>
+          <ul className="team-preview-topics">
+            {t.teamPreview.topics.map((topic, index) => (
+              <li key={topic.title}>
+                <span className="team-preview-number" aria-hidden="true">
+                  0{index + 1}
+                </span>
+                <div>
+                  <h3>{topic.title}</h3>
+                  <p>{topic.text}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
   );

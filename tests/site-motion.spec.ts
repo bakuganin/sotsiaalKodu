@@ -387,7 +387,7 @@ test("normal motion fits narrow screens during home and internal-page reveals", 
       JSON.stringify({ textSize: 200, reduceMotion: false }),
     );
   });
-  await page.goto("/");
+  await page.goto("/team/");
   const gallery = page.locator(".team-gallery");
   await expect(gallery).toHaveAttribute("data-motion-state", "pending");
   await page.evaluate(() => document.fonts.ready);
