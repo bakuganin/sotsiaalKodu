@@ -1,6 +1,6 @@
 import { expect, test, type Locator, type Page } from "./fixtures";
 
-const group = (page: Page, variant: "process" | "faq") =>
+const group = (page: Page, variant: "faq") =>
   page.locator(`.${variant}-list.animated-accordion`);
 
 async function waitForTransitions(accordion: Locator) {
@@ -44,7 +44,7 @@ async function sampleToggle(item: Locator) {
   });
 }
 
-test("both accordions interpolate height and opacity when opening and closing", async ({
+test("FAQ answers interpolate height and opacity when opening and closing", async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
@@ -53,11 +53,11 @@ test("both accordions interpolate height and opacity when opening and closing", 
     await page.goto("/");
     await page.evaluate(() => document.fonts.ready);
 
-    for (const variant of ["process", "faq"] as const) {
+    for (const variant of ["faq"] as const) {
       const accordion = group(page, variant);
       const item = accordion.locator(".accordion-item").first();
       await accordion.scrollIntoViewIfNeeded();
-      const initialOpen = variant === "process";
+      const initialOpen = false;
       await expect(item).toHaveAttribute("data-open", String(initialOpen));
 
       for (const opening of [!initialOpen, initialOpen]) {
@@ -90,9 +90,7 @@ test("native keyboard buttons expose only expanded panels to assistive technolog
   page,
 }) => {
   await page.goto("/");
-  const process = group(page, "process");
   const faq = group(page, "faq");
-  await expect(process.getByRole("region")).toHaveCount(1);
   await expect(faq.getByRole("region")).toHaveCount(0);
 
   const allIds = await page
@@ -100,7 +98,7 @@ test("native keyboard buttons expose only expanded panels to assistive technolog
     .evaluateAll((elements) => elements.map((element) => element.id));
   expect(new Set(allIds).size).toBe(allIds.length);
 
-  for (const accordion of [process, faq]) {
+  for (const accordion of [faq]) {
     const item = accordion.locator(".accordion-item").nth(1);
     const trigger = item.getByRole("button");
     const panel = item.locator(".accordion-panel");
@@ -142,7 +140,7 @@ test("exclusive selection and rapid reversals settle on the final requested stat
 }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
-  for (const variant of ["process", "faq"] as const) {
+  for (const variant of ["faq"] as const) {
     const accordion = group(page, variant);
     await accordion.scrollIntoViewIfNeeded();
     const states = await accordion.evaluate(async (element) => {

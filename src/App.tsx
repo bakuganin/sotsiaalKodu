@@ -20,6 +20,7 @@ import DevelopmentNotice, {
   shouldShowDevelopmentNotice,
 } from "./development/DevelopmentNotice";
 import TeamSection from "./team/TeamSection";
+import ProcessSection from "./process/ProcessSection";
 import PrinciplesScene from "./principles/PrinciplesScene";
 import IntroComposition from "./motion/IntroComposition";
 import useSiteMotion from "./motion/useSiteMotion";
@@ -512,29 +513,7 @@ export default function App() {
                 ))}
               </section>
 
-              <section
-                className="process-section process-editorial container"
-                aria-labelledby="process-title"
-              >
-                <aside className="process-rail" data-motion="copy">
-                  <p className="eyebrow">КАК МЫ ПОМОГАЕМ</p>
-                </aside>
-                <div className="process-body">
-                  <h2
-                    id="process-title"
-                    className="editorial-statement"
-                    data-motion="heading"
-                  >
-                    Начнём с <span>простого разговора</span> и вместе найдём
-                    следующий шаг.
-                  </h2>
-                  <AnimatedAccordion
-                    variant="process"
-                    items={t.process.steps}
-                    defaultOpenIndex={0}
-                  />
-                </div>
-              </section>
+              <ProcessSection onBook={() => openBooking()} />
 
               <section className="faq-section">
                 <div className="editorial-section container">
