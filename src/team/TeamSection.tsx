@@ -211,7 +211,19 @@ export default function TeamSection() {
             слушаем
           </span>{" "}
           вашу историю, вместе ищем <span>подходящую помощь</span> и создаём
-          встречи, где можно <span>учиться друг у друга.</span>
+          встречи{" "}
+          <span className="statement-phrase">
+            <img
+              className="statement-art statement-round"
+              src="/images/service-flower.webp"
+              alt=""
+              width="512"
+              height="560"
+              loading="lazy"
+            />{" "}
+            где
+          </span>{" "}
+          можно <span>учиться друг у друга.</span>
         </h2>
         <div className="community-footer" data-motion="copy">
           <a className="community-link" href="/team/">

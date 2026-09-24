@@ -359,3 +359,11 @@
   object-fit: cover;
   object-position: 65% 50%;
 }
+
+.editorial-statement .statement-round {
+  width: 0.85em;
+  height: 0.85em;
+  border-radius: 50%;
+  object-fit: contain;
+  padding: 0.06em;
+}
