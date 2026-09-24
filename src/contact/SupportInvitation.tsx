@@ -1,4 +1,4 @@
-import type { PointerEvent } from "react";
+import { useEffect, useRef, useState, type PointerEvent } from "react";
 import {
   MessageCircle,
   Users,
@@ -13,17 +13,18 @@ import "./support-invitation.css";
 const t = getContent();
 const icons = [MessageCircle, Users, House, Footprints, Clock3, HandHeart];
 
-function tiltCard(event: PointerEvent<HTMLLIElement>) {
+function moveCards(event: PointerEvent<HTMLDivElement>) {
   if (
     event.pointerType !== "mouse" ||
+    event.currentTarget.dataset.floating !== "true" ||
     !matchMedia("(hover: hover) and (pointer: fine)").matches ||
     matchMedia("(prefers-reduced-motion: reduce)").matches ||
     document.documentElement.dataset.a11yReduceMotion === "true"
   )
     return;
 
-  const card = event.currentTarget;
-  const bounds = card.getBoundingClientRect();
+  const scene = event.currentTarget;
+  const bounds = scene.getBoundingClientRect();
   const x = Math.max(
     -1,
     Math.min(1, ((event.clientX - bounds.left) / bounds.width - 0.5) * 2),
@@ -32,18 +33,40 @@ function tiltCard(event: PointerEvent<HTMLLIElement>) {
     -1,
     Math.min(1, ((event.clientY - bounds.top) / bounds.height - 0.5) * 2),
   );
-  card.style.setProperty("--card-rotate-x", `${-y * 8}deg`);
-  card.style.setProperty("--card-rotate-y", `${x * 8}deg`);
-  card.style.setProperty("--card-drift-x", `${x * 4}px`);
-  card.style.setProperty("--card-drift-y", `${y * 3}px`);
+  scene.style.setProperty("--cards-x", `${x * 10}px`);
+  scene.style.setProperty("--cards-y", `${y * 7}px`);
 }
 
-function resetCard(event: PointerEvent<HTMLLIElement>) {
-  for (const property of ["rotate-x", "rotate-y", "drift-x", "drift-y"])
-    event.currentTarget.style.removeProperty(`--card-${property}`);
+function resetCards(event: PointerEvent<HTMLDivElement>) {
+  event.currentTarget.style.removeProperty("--cards-x");
+  event.currentTarget.style.removeProperty("--cards-y");
 }
 
-export default function SupportInvitation() {
+export default function SupportInvitation({
+  paused = false,
+}: {
+  paused?: boolean;
+}) {
+  const scene = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const element = scene.current;
+    if (!element) return;
+    let inView = false;
+    const refresh = () => setVisible(inView && !document.hidden);
+    const observer = new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting;
+      refresh();
+    });
+    observer.observe(element);
+    document.addEventListener("visibilitychange", refresh);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", refresh);
+    };
+  }, []);
+
   return (
     <div
       className="support-invitation"
@@ -57,9 +80,16 @@ export default function SupportInvitation() {
         >
           {t.contact.invitation.eyebrow}
         </h2>
-        <div className="support-world-scene">
+        <div
+          ref={scene}
+          className="support-world-scene"
+          data-floating={visible && !paused}
+          onPointerMove={moveCards}
+          onPointerLeave={resetCards}
+          onPointerCancel={resetCards}
+        >
           <p className="support-world-word" aria-hidden="true">
-            ОПОРА
+            <span>SOTSIAAL</span> <span>KODU</span>
           </p>
           <img
             className="support-world-image"
@@ -79,9 +109,6 @@ export default function SupportInvitation() {
                 <li
                   className={`support-world-card support-world-card-${index + 1}`}
                   key={label}
-                  onPointerMove={tiltCard}
-                  onPointerLeave={resetCard}
-                  onPointerCancel={resetCard}
                 >
                   <div className="support-world-card-surface">
                     <Icon size={25} strokeWidth={1.8} aria-hidden="true" />

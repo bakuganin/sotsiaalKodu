@@ -108,76 +108,127 @@ test("reduced motion shows the contact composition immediately", async ({
   await expect(pair).toHaveCSS("clip-path", "none");
 });
 
-test("support cards follow the mouse, return to rest and respect motion preferences", async ({
+for (const width of [1440, 390]) {
+  test(`all support cards float without hover at ${width}px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 1000 });
+    await page.goto("/");
+    const section = page.locator(".support-invitation");
+    const scene = section.locator(".support-world-scene");
+    await section.scrollIntoViewIfNeeded();
+    await expect(section).toHaveAttribute("data-motion-state", "settled");
+    await expect(scene).toHaveAttribute("data-floating", "true");
+    await expect(section.locator(".support-world-word")).toHaveText(
+      "SOTSIAAL KODU",
+    );
+    await page.mouse.move(0, 0);
+
+    const ranges = await scene.evaluate(async (element) => {
+      const cards = [
+        ...element.querySelectorAll(".support-world-card-surface"),
+      ];
+      const samples = cards.map(() => [] as number[]);
+      const start = performance.now();
+      while (performance.now() - start < 1000) {
+        await new Promise(requestAnimationFrame);
+        cards.forEach((card, i) => {
+          samples[i].push(
+            new DOMMatrixReadOnly(getComputedStyle(card).transform).m42,
+          );
+        });
+      }
+      return samples.map((values) => Math.max(...values) - Math.min(...values));
+    });
+    expect(ranges).toHaveLength(6);
+    ranges.forEach((range) => expect(range).toBeGreaterThan(0.4));
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth - innerWidth,
+      ),
+    ).toBeLessThanOrEqual(1);
+
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+    await expect(scene).toHaveAttribute("data-floating", "false");
+    for (const card of await scene
+      .locator(".support-world-card-surface")
+      .all()) {
+      await expect(card).toHaveCSS("animation-play-state", "paused");
+    }
+    await section.scrollIntoViewIfNeeded();
+    await expect(scene).toHaveAttribute("data-floating", "true");
+    await page.locator(".a11y-launcher").click();
+    await expect(page.locator("dialog[open]")).toBeVisible();
+    await expect(scene).toHaveAttribute("data-floating", "false");
+  });
+}
+
+test("cursor moves all support cards together and motion settings disable both effects", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("/");
   const section = page.locator(".support-invitation");
+  const scene = section.locator(".support-world-scene");
+  const cards = scene.locator(".support-world-card");
   await section.scrollIntoViewIfNeeded();
   await expect(section).toHaveAttribute("data-motion-state", "settled");
-  await expect(section).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
-  await expect(section.getByRole("button")).toHaveCount(0);
-  await expect(section).not.toContainText("Первый шаг к поддержке");
-
-  const card = section.locator(".support-world-card").nth(3);
-  const surface = card.locator(".support-world-card-surface");
-  await expect(surface).toHaveCSS("font-weight", "600");
-  const original = await card.boundingBox();
-  await card.hover({ position: { x: 18, y: 22 } });
-  await expect
-    .poll(() => surface.evaluate((e) => getComputedStyle(e).transform))
-    .not.toBe("none");
-  const firstTransform = await surface.evaluate(
-    (e) => getComputedStyle(e).transform,
-  );
+  const bounds = await scene.boundingBox();
+  await scene.hover({ position: { x: 60, y: bounds!.height / 2 } });
   await expect
     .poll(() =>
-      card.evaluate((e) =>
-        parseFloat(e.style.getPropertyValue("--card-rotate-y")),
+      cards.evaluateAll((elements) =>
+        elements.every(
+          (e) => new DOMMatrixReadOnly(getComputedStyle(e).transform).m41 < -2,
+        ),
       ),
     )
-    .toBeLessThan(0);
-  await card.hover({
-    position: { x: original!.width - 18, y: original!.height - 22 },
+    .toBe(true);
+  await scene.hover({
+    position: { x: bounds!.width - 60, y: bounds!.height / 2 },
   });
   await expect
     .poll(() =>
-      card.evaluate((e) =>
-        parseFloat(e.style.getPropertyValue("--card-rotate-y")),
+      cards.evaluateAll((elements) =>
+        elements.every(
+          (e) => new DOMMatrixReadOnly(getComputedStyle(e).transform).m41 > 2,
+        ),
       ),
     )
-    .toBeGreaterThan(0);
+    .toBe(true);
+  await page.mouse.move(0, 0);
   await expect
-    .poll(() => surface.evaluate((e) => getComputedStyle(e).transform))
-    .not.toBe(firstTransform);
-  expect(await card.boundingBox()).toEqual(original);
+    .poll(() =>
+      cards.evaluateAll((elements) =>
+        elements.every(
+          (e) =>
+            Math.abs(new DOMMatrixReadOnly(getComputedStyle(e).transform).m41) <
+            0.1,
+        ),
+      ),
+    )
+    .toBe(true);
 
-  await page.mouse.move(0, 0);
-  await expect(surface).toHaveCSS("transform", "none");
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await card.hover();
-  await expect(surface).toHaveCSS("transform", "none");
-
-  await page.mouse.move(0, 0);
-  await page.emulateMedia({ reducedMotion: "no-preference" });
-  await page.evaluate(
-    () => (document.documentElement.dataset.a11yReduceMotion = "true"),
-  );
-  await card.hover();
-  await expect(surface).toHaveCSS("transform", "none");
-
-  await page.mouse.move(0, 0);
-  await page.evaluate(
-    () => (document.documentElement.dataset.a11yReduceMotion = "false"),
-  );
-  await card.dispatchEvent("pointermove", {
-    pointerType: "touch",
-    clientX: 20,
-    clientY: 20,
-  });
-  await expect(surface).toHaveCSS("transform", "none");
-  expect(
-    await card.evaluate((e) => e.style.getPropertyValue("--card-rotate-y")),
-  ).toBe("");
+  for (const preference of ["system", "site"]) {
+    if (preference === "system")
+      await page.emulateMedia({ reducedMotion: "reduce" });
+    else {
+      await page.emulateMedia({ reducedMotion: "no-preference" });
+      await page.evaluate(
+        () => (document.documentElement.dataset.a11yReduceMotion = "true"),
+      );
+    }
+    await scene.hover({ position: { x: 60, y: bounds!.height / 2 } });
+    for (const card of await cards.all()) {
+      await expect(card).toHaveCSS("transform", "none");
+      await expect(card.locator(".support-world-card-surface")).toHaveCSS(
+        "animation-name",
+        "none",
+      );
+      await expect(card.locator(".support-world-card-surface")).toHaveCSS(
+        "transform",
+        "none",
+      );
+    }
+  }
 });
