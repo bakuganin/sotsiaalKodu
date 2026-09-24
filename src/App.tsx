@@ -514,22 +514,6 @@ export default function App() {
               </section>
 
               <ProcessSection onBook={() => openBooking()} />
-
-              <section className="faq-section">
-                <div className="editorial-section container">
-                  <div className="section-rail" data-motion="heading">
-                    <p className="eyebrow">{t.faq.eyebrow}</p>
-                    <h2 className="display-heading">{t.faq.title}</h2>
-                  </div>
-                  <AnimatedAccordion
-                    variant="faq"
-                    items={t.faq.items.map((item) => ({
-                      title: item.question,
-                      text: item.answer,
-                    }))}
-                  />
-                </div>
-              </section>
             </div>
 
             <section id="contact" className="contact-section">
@@ -625,6 +609,22 @@ export default function App() {
                     </div>
                   </div>
                 </div>
+              </div>
+            </section>
+
+            <section className="faq-section">
+              <div className="editorial-section container">
+                <div className="section-rail" data-motion="heading">
+                  <p className="eyebrow">{t.faq.eyebrow}</p>
+                  <h2 className="display-heading">{t.faq.title}</h2>
+                </div>
+                <AnimatedAccordion
+                  variant="faq"
+                  items={t.faq.items.map((item) => ({
+                    title: item.question,
+                    text: item.answer,
+                  }))}
+                />
               </div>
             </section>
           </>
