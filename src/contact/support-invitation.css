@@ -90,9 +90,9 @@
     inset 0 1px 0 #ffffffe6,
     inset 1px 0 0 #ffffff60,
     inset 0 -1px 0 #ffffff70;
-  color: #101710;
+  color: #e2edb5;
   font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.4;
   animation: support-card-float 5.8s ease-in-out infinite;
   animation-delay: var(--float-phase, 0s);
@@ -176,59 +176,65 @@
     font-size: 0.7rem;
   }
   .support-world-scene {
-    height: 650px;
-    overflow: clip;
+    height: auto;
+    padding-top: 14px;
   }
   .support-world-word {
+    bottom: auto;
+    height: calc(min(90cqw, 360px) + 42px);
     flex-direction: column;
     justify-content: space-between;
-    padding-block: 16px 30px;
-    font-size: 17cqw;
+    padding-block: 16px 0;
+    font-size: min(17cqw, 80px);
   }
   .support-world-word span:last-child {
     font-size: 1.55em;
   }
   .support-world-image {
-    width: min(94%, 480px);
-    top: 48%;
+    position: relative;
+    display: block;
+    width: min(90%, 360px);
+    left: auto;
+    top: auto;
+    transform: none;
+    margin-inline: auto;
+    margin-bottom: 24px;
+  }
+  .support-world-cards {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 14px;
+    padding: 20px 16px 30px;
+    margin-top: 8px;
   }
   .support-world-card {
-    width: 104px;
+    position: static;
+    width: auto;
+    min-width: 0;
   }
   .support-world-card-surface {
-    min-height: 110px;
-    padding: 12px 8px;
-    border-radius: 15px;
-    font-size: 0.8rem;
-    gap: 8px;
+    height: 100%;
+    min-height: 124px;
+    padding: 18px 12px;
+    border-radius: 18px;
+    font-size: 1rem;
+    gap: 10px;
+    background-color: #10171040;
+    background-image: linear-gradient(
+      135deg,
+      #ffffff94,
+      #ffffff52 24%,
+      #ffffff2e 55%,
+      #ffffff61
+    );
+    -webkit-backdrop-filter: blur(14px) brightness(0.8) saturate(80%);
+    backdrop-filter: blur(14px) brightness(0.8) saturate(80%);
   }
   .support-world-card svg {
-    width: 22px;
-    height: 22px;
-  }
-  .support-world-card-1 {
-    left: 8%;
-    top: 6%;
-  }
-  .support-world-card-2 {
-    right: 7%;
-    top: 16%;
-  }
-  .support-world-card-3 {
-    left: 2%;
-    top: 37%;
-  }
-  .support-world-card-4 {
-    right: 2%;
-    top: 51%;
-  }
-  .support-world-card-5 {
-    left: 8%;
-    bottom: 9%;
-  }
-  .support-world-card-6 {
-    right: 8%;
-    bottom: 3%;
+    width: 25px;
+    height: 25px;
   }
 }
 :root:is([data-a11y-text-size="150"], [data-a11y-text-size="200"])
