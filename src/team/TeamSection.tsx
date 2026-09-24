@@ -198,11 +198,11 @@ export default function TeamSection() {
           className="editorial-statement"
           data-motion="heading"
         >
-          Мы помогаем <span>найти опору</span> —{" "}
+          Мы помогаем <span>найти опору</span>:{" "}
           <span className="statement-phrase">
             <img
-              className="statement-art"
-              src="/images/intro/glass-nest.webp"
+              className="statement-art statement-leaves"
+              src="/images/calm-branch.webp"
               alt=""
               width="512"
               height="512"

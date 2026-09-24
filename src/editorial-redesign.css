@@ -347,3 +347,15 @@
 .community-footer {
   grid-template-columns: 1fr;
 }
+
+.community-section .community-link {
+  color: var(--ink);
+  border-bottom-color: #20251b33;
+}
+.process-editorial .accordion-title {
+  font-weight: 600;
+}
+.editorial-statement .statement-leaves {
+  object-fit: cover;
+  object-position: 65% 50%;
+}
