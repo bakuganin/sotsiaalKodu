@@ -638,13 +638,7 @@ export default function App() {
           />
           <div className="meadow-content">
             <div className="meadow-invitation" data-motion="copy">
-              <h2>
-                Больше заботы.
-                <br />
-                Больше опоры.
-                <br />
-                <span>В вашем ритме.</span>
-              </h2>
+              <h2>Вместе легче сделать шаг.</h2>
               <button
                 className="meadow-action"
                 onClick={() => openBooking()}
