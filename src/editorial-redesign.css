@@ -380,9 +380,12 @@
   background: #f2f3ee;
   padding: 24px 28px 30px;
   min-width: 0;
+  transition: background-color 280ms ease;
 }
-.support-situation-close {
-  background: #e2edb5;
+@media (hover: hover) and (pointer: fine) {
+  .support-situation:hover {
+    background-color: #e2edb5;
+  }
 }
 .support-situation-art {
   aspect-ratio: 1.25;
