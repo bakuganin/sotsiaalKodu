@@ -636,14 +636,9 @@ main:focus {
   bottom: 42%;
 }
 .intro-artworks > span {
-  background: #f6f7f0;
   aspect-ratio: 1;
-  border-radius: 50%;
   display: grid;
   place-items: center;
-}
-.intro-artworks > :is(.intro-care, .intro-contact) {
-  border-radius: 24%;
 }
 .intro-artworks .service-art {
   width: 82%;

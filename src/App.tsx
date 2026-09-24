@@ -305,7 +305,7 @@ export default function App() {
                       <span className="intro-contact">
                         <img
                           className="service-art"
-                          src="/images/section-icons/contact.webp"
+                          src="/images/intro/botanical-butterfly.webp"
                           alt=""
                           width="512"
                           height="512"
@@ -325,7 +325,7 @@ export default function App() {
                       <span className="intro-care">
                         <img
                           className="service-art"
-                          src="/images/section-icons/care.webp"
+                          src="/images/intro/glass-nest.webp"
                           alt=""
                           width="512"
                           height="512"
