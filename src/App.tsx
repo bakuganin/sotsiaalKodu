@@ -487,6 +487,32 @@ export default function App() {
               <TeamSection />
 
               <section
+                className="support-situations container"
+                aria-label="С чем можно к нам прийти"
+              >
+                {t.supportSituations.map((item) => (
+                  <article
+                    className={`support-situation support-situation-${item.id}`}
+                    key={item.id}
+                  >
+                    <div className="support-situation-art">
+                      <img
+                        src={`/images/situations/${item.id}.webp`}
+                        alt=""
+                        width="640"
+                        height="640"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div className="support-situation-copy">
+                      <h3>{item.title}</h3>
+                      <p>{item.text}</p>
+                    </div>
+                  </article>
+                ))}
+              </section>
+
+              <section
                 className="process-section process-editorial container"
                 aria-labelledby="process-title"
               >
