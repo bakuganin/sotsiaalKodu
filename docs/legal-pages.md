@@ -12,6 +12,7 @@ Source: customer-provided business-register extract dated 04.09.2026; cross-chec
 - No analytics, advertising pixels, remote fonts, embedded video, payment or submission backend is configured.
 - Booking fields stay in React state; close clears name/contact, reopening resets the other choices. No submission request or persistent record is created.
 - Accessibility preferences are written to localStorage under `kodu-accessibility-v1`, including defaults. Legacy `kodu-large-text` is read/migrated/deleted.
+- A language explicitly selected by the visitor is stored as `et`, `ru` or `en` in localStorage under `sotsiaal-language`. There is no automatic expiry; the default without a saved choice is Estonian. The privacy and browser-storage pages disclose this preference in all three languages.
 - The development notice writes `sotsiaal-development-notice-dismissed` to sessionStorage after dismissal. Browser session restoration can preserve sessionStorage.
 - The old preloader files are not loaded; its historical storage key is not an active feature.
 - Gmail is the registered contact address. The website itself does not read that mailbox.

@@ -1,24 +1,25 @@
+import { tr } from "../i18n";
 import { ArrowRight } from "lucide-react";
 import { getContent } from "../content";
 import { TeamGallery } from "../team/TeamSection";
 import { PageBreadcrumb, PageContact, type DetailPageProps } from "./PageParts";
 import "./pages.css";
 
-const t = getContent();
-
 export default function TeamPage({ onBook }: DetailPageProps) {
+  const t = getContent();
   return (
     <div className="detail-page people-page">
       <div className="container">
-        <PageBreadcrumb current="Команда" />
+        <PageBreadcrumb current={tr("Команда")} />
         <section
           className="detail-page-intro"
           aria-labelledby="team-page-title"
         >
           <div data-motion="heading">
-            <p className="detail-kicker">Люди, которые рядом</p>
+            <p className="detail-kicker">{tr("Люди, которые рядом")}</p>
             <h1 id="team-page-title">
-              Люди, которым важно <span>ваше благополучие</span>
+              {tr("Люди, которым важно ")}
+              <span>{tr("ваше благополучие")}</span>
             </h1>
           </div>
           <div
@@ -28,13 +29,16 @@ export default function TeamPage({ onBook }: DetailPageProps) {
           >
             <p>{t.teamSection.description}</p>
             <a className="detail-text-link" href="/services/">
-              Как мы можем помочь
+              {tr("Как мы можем помочь")}
               <ArrowRight size={19} aria-hidden="true" />
             </a>
           </div>
         </section>
 
-        <section className="people-team" aria-label="Команда Sotsiaal Kodu">
+        <section
+          className="people-team"
+          aria-label={tr("Команда Sotsiaal Kodu")}
+        >
           <TeamGallery onBook={onBook} memberAnchors nameHeadingLevel={2} />
         </section>
         <section
@@ -42,9 +46,10 @@ export default function TeamPage({ onBook }: DetailPageProps) {
           aria-labelledby="people-approach-title"
         >
           <div data-motion="heading">
-            <p className="detail-kicker">Что нас объединяет</p>
+            <p className="detail-kicker">{tr("Что нас объединяет")}</p>
             <h2 id="people-approach-title">
-              В основе заботы <span>внимание к человеку</span>
+              {tr("В основе заботы ")}
+              <span>{tr("внимание к человеку")}</span>
             </h2>
             <p>{t.teamSection.profileText}</p>
           </div>

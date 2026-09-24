@@ -1,3 +1,4 @@
+import { tr, localize, getIntlLocale } from "../i18n";
 import {
   useCallback,
   useEffect,
@@ -22,7 +23,7 @@ import {
   X,
   type LucideIcon,
 } from "lucide-react";
-import { bookingRu as copy } from "./ru";
+import { bookingRu } from "./ru";
 import "./booking.css";
 
 type Service = { id: string; title: string };
@@ -51,13 +52,13 @@ const dateAtNoon = (year: number, month: number, day: number) =>
   new Date(Date.UTC(year, month, day, 12));
 const dateKey = (date: Date) => date.toISOString().slice(0, 10);
 const formatDate = (date: Date, options: Intl.DateTimeFormatOptions) =>
-  new Intl.DateTimeFormat(copy.locale, {
+  new Intl.DateTimeFormat(getIntlLocale(), {
     ...options,
-    timeZone: copy.timeZone,
+    timeZone: bookingRu.timeZone,
   }).format(date);
 const todayInTallinn = () => {
   const parts = new Intl.DateTimeFormat("en-CA", {
-    timeZone: copy.timeZone,
+    timeZone: bookingRu.timeZone,
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
@@ -74,6 +75,7 @@ export default function BookingDialog({
   services,
   phone,
 }: BookingDialogProps) {
+  const copy = localize(bookingRu);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
@@ -555,7 +557,7 @@ export default function BookingDialog({
                       day: "numeric",
                       month: "long",
                     })}{" "}
-                  · {selectedTime} · {copy.timeZone}
+                  · {selectedTime} · {bookingRu.timeZone}
                 </small>
               </span>
             </div>
@@ -646,7 +648,7 @@ export default function BookingDialog({
             <p className="booking-privacy" id="booking-privacy">
               {copy.contactPrivacy}{" "}
               <a href="/privacy/" target="_blank" rel="noreferrer">
-                Политика конфиденциальности (в новой вкладке)
+                {tr("Политика конфиденциальности (в новой вкладке)")}
               </a>
             </p>
             <div className="booking-actions">
@@ -690,7 +692,7 @@ export default function BookingDialog({
               <div>
                 <dt>{copy.time}</dt>
                 <dd>
-                  {selectedTime} · {copy.timeZone}
+                  {selectedTime} · {bookingRu.timeZone}
                 </dd>
               </div>
               <div>

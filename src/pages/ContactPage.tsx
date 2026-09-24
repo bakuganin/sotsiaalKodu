@@ -1,3 +1,4 @@
+import { tr } from "../i18n";
 import {
   ArrowDown,
   ArrowUpRight,
@@ -12,30 +13,32 @@ import { PageBreadcrumb } from "./PageParts";
 import "./pages.css";
 import "./contact-page.css";
 
-const t = getContent();
-
 export default function ContactPage({ paused }: { paused: boolean }) {
+  const t = getContent();
   return (
     <div className="contact-page">
       <div className="container">
-        <PageBreadcrumb current="Контакты" />
+        <PageBreadcrumb current={tr("Контакты")} />
         <section
           className="contact-page-intro"
           aria-labelledby="contact-page-title"
         >
           <div data-motion="heading">
-            <p className="eyebrow">Контакты</p>
+            <p className="eyebrow">{tr("Контакты")}</p>
             <h1 id="contact-page-title">
-              Мы <span>на связи</span>
+              {tr("Мы ")}
+              <span>{tr("на связи")}</span>
             </h1>
           </div>
           <div className="contact-page-intro-copy" data-motion="copy">
             <p>
-              Можно начать с простого разговора. Расскажите о себе или близком
-              человеке — вместе найдём следующий шаг.
+              {tr(
+                "Можно начать с простого разговора. Расскажите о себе или близком человеке — вместе найдём следующий шаг.",
+              )}
             </p>
             <a href="#contact-details">
-              Выбрать способ связи <ArrowDown size={18} aria-hidden="true" />
+              {tr("Выбрать способ связи ")}
+              <ArrowDown size={18} aria-hidden="true" />
             </a>
           </div>
         </section>
@@ -50,15 +53,16 @@ export default function ContactPage({ paused }: { paused: boolean }) {
       >
         <div className="contact-page-panel">
           <div className="contact-page-direct" data-motion="copy">
-            <p className="eyebrow">Начать разговор</p>
+            <p className="eyebrow">{tr("Начать разговор")}</p>
             <h2 id="contact-details-title">
-              Позвоните
+              {tr("Позвоните")}
               <br />
-              или напишите
+              {tr("или напишите")}
             </h2>
             <p className="contact-page-note">
-              Не обязательно заранее знать, какая помощь нужна. Мы поможем
-              разобраться.
+              {tr(
+                "Не обязательно заранее знать, какая помощь нужна. Мы поможем разобраться.",
+              )}
             </p>
             <a
               className="contact-page-method"
@@ -66,7 +70,7 @@ export default function ContactPage({ paused }: { paused: boolean }) {
             >
               <Phone size={23} aria-hidden="true" />
               <span>
-                <small>Телефон</small>
+                <small>{tr("Телефон")}</small>
                 <strong>{organization.phoneDisplay}</strong>
               </span>
               <ArrowUpRight size={21} aria-hidden="true" />
@@ -77,7 +81,7 @@ export default function ContactPage({ paused }: { paused: boolean }) {
             >
               <Mail size={23} aria-hidden="true" />
               <span>
-                <small>Электронная почта</small>
+                <small>{tr("Электронная почта")}</small>
                 <strong>{organization.email}</strong>
               </span>
               <ArrowUpRight size={21} aria-hidden="true" />
@@ -86,35 +90,42 @@ export default function ContactPage({ paused }: { paused: boolean }) {
           <div className="contact-page-practical" data-motion="copy">
             <div id="contact-meeting" className="contact-page-info">
               <CalendarDays size={25} aria-hidden="true" />
-              <h2>Встреча в вашем ритме</h2>
+              <h2>{tr("Встреча в вашем ритме")}</h2>
               <p>
-                Свяжитесь с нами, чтобы обсудить удобное время и формат встречи.{" "}
+                {tr(
+                  "Свяжитесь с нами, чтобы обсудить удобное время и формат встречи.",
+                )}{" "}
                 {t.contact.visitNote}
               </p>
             </div>
             <div id="contact-address" className="contact-page-info">
               <MapPin size={25} aria-hidden="true" />
               <h2>{t.contact.legalAddress}</h2>
-              <address>{organization.legalAddress}</address>
+              <address>{tr(organization.legalAddress)}</address>
               <p>
-                Это адрес регистрации компании. Для встречи, пожалуйста, сначала
-                позвоните или напишите нам.
+                {tr(
+                  "Это адрес регистрации компании. Для встречи, пожалуйста, сначала позвоните или напишите нам.",
+                )}
               </p>
             </div>
           </div>
           <div className="contact-page-company">
             <p>
               {organization.name}
-              <span>Регистрационный код {organization.registryCode}</span>
+              <span>
+                {tr("Регистрационный код ")}
+                {organization.registryCode}
+              </span>
             </p>
             <a href="/company/">
-              Реквизиты компании <ArrowUpRight size={18} aria-hidden="true" />
+              {tr("Реквизиты компании ")}
+              <ArrowUpRight size={18} aria-hidden="true" />
             </a>
           </div>
         </div>
         <p className="contact-page-privacy">
-          О том, как мы обрабатываем обращения, читайте в{" "}
-          <a href="/privacy/">политике конфиденциальности</a>.
+          {tr("О том, как мы обрабатываем обращения, читайте в")}{" "}
+          <a href="/privacy/">{tr("политике конфиденциальности")}</a>.
         </p>
       </section>
     </div>

@@ -1,4 +1,13 @@
 /* Preferences are opt-in: the default design keeps its original geometry. */
+:root:is([data-a11y-text-size="150"], [data-a11y-text-size="200"])
+  .community-section
+  .editorial-statement
+  > .statement-phrase {
+  display: inline;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
 :root[data-a11y-text-size="100"] {
   font-size: 16px;
   --a11y-text-scale: 1;

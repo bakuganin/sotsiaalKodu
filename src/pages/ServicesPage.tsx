@@ -1,3 +1,4 @@
+import { tr } from "../i18n";
 import { ArrowDown, ArrowRight, Check } from "lucide-react";
 import { getContent } from "../content";
 import { serviceArtwork } from "../brand/serviceArtwork";
@@ -9,21 +10,21 @@ import {
 } from "./PageParts";
 import "./pages.css";
 
-const t = getContent();
-
 export default function ServicesPage({ onBook }: DetailPageProps) {
+  const t = getContent();
   return (
     <div className="detail-page services-page">
       <div className="container">
-        <PageBreadcrumb current="Услуги" />
+        <PageBreadcrumb current={tr("Услуги")} />
         <section
           className="detail-page-intro"
           aria-labelledby="services-page-title"
         >
           <div data-motion="heading">
-            <p className="detail-kicker">Четыре направления помощи</p>
+            <p className="detail-kicker">{tr("Четыре направления помощи")}</p>
             <h1 id="services-page-title">
-              Поддержка, которая <span>подходит вам</span>
+              {tr("Поддержка, которая ")}
+              <span>{tr("подходит вам")}</span>
             </h1>
           </div>
           <div
@@ -33,13 +34,13 @@ export default function ServicesPage({ onBook }: DetailPageProps) {
           >
             <p>{t.servicesSection.description}</p>
             <a className="detail-text-link" href="/team/">
-              Кто будет рядом
+              {tr("Кто будет рядом")}
               <ArrowRight size={19} aria-hidden="true" />
             </a>
           </div>
         </section>
 
-        <nav className="services-index" aria-label="Направления помощи">
+        <nav className="services-index" aria-label={tr("Направления помощи")}>
           {t.services.map((service, index) => (
             <a
               className="services-index-card"

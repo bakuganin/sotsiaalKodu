@@ -202,6 +202,11 @@ test("unavailable browser storage does not prevent acknowledgement or further na
     }
   });
   await page.goto("/?loader=0");
+  // Unavailable storage means there is no remembered locale: Estonian is the default.
+  await notice(page).locator(".language-trigger").click();
+  await notice(page)
+    .getByRole("menuitemradio", { name: "Русский", exact: true })
+    .click();
   await expectNotice(page);
   await continueButton(page).click();
   await expectDismissed(page);

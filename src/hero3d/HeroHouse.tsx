@@ -1,3 +1,4 @@
+import { tr } from "../i18n";
 import { useEffect, useRef, useState } from "react";
 import { RotateCcw } from "lucide-react";
 import type { HeroSceneController } from "./createHeroScene";
@@ -207,7 +208,7 @@ export default function HeroHouse({ alt }: { alt: string }) {
           onClick={() => controllerRef.current?.replay()}
         >
           <RotateCcw size={14} aria-hidden="true" />
-          <span>Раскрыть заново</span>
+          <span>{tr("Раскрыть заново")}</span>
         </button>
       )}
     </div>

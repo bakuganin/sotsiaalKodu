@@ -1,3 +1,4 @@
+import { tr } from "../i18n";
 import { useRef, useState, type KeyboardEvent } from "react";
 import {
   ArrowRight,
@@ -10,7 +11,6 @@ import {
 import { getContent } from "../content";
 import "./process.css";
 
-const t = getContent();
 const icons = [MessageCircle, Sprout, CalendarDays];
 const artwork = [
   { cover: "forest", detail: "conversation" },
@@ -19,6 +19,7 @@ const artwork = [
 ];
 
 export default function ProcessSection({ onBook }: { onBook: () => void }) {
+  const t = getContent();
   const [active, setActive] = useState(0);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
   const count = t.process.steps.length;
@@ -80,14 +81,14 @@ export default function ProcessSection({ onBook }: { onBook: () => void }) {
           <div className="process-controls">
             <button
               type="button"
-              aria-label="Предыдущий шаг"
+              aria-label={tr("Предыдущий шаг")}
               onClick={() => select(active - 1)}
             >
               <ChevronLeft size={22} aria-hidden="true" />
             </button>
             <button
               type="button"
-              aria-label="Следующий шаг"
+              aria-label={tr("Следующий шаг")}
               onClick={() => select(active + 1)}
             >
               <ChevronRight size={22} aria-hidden="true" />
@@ -101,7 +102,7 @@ export default function ProcessSection({ onBook }: { onBook: () => void }) {
           <div
             className="process-tabs"
             role="tablist"
-            aria-label="Шаги обращения"
+            aria-label={tr("Шаги обращения")}
           >
             {t.process.presentation.tabs.map((label, index) => {
               const Icon = icons[index];
@@ -153,7 +154,10 @@ export default function ProcessSection({ onBook }: { onBook: () => void }) {
                 inert={active !== index}
                 tabIndex={active === index ? 0 : -1}
               >
-                <p className="process-step-caption">Шаг 0{index + 1}</p>
+                <p className="process-step-caption">
+                  {tr("Шаг 0")}
+                  {index + 1}
+                </p>
                 <h3>{step.title}</h3>
                 <p className="process-step-description">{step.text}</p>
               </div>

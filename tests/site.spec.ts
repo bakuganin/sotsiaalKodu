@@ -243,7 +243,10 @@ test("booking validates contacts and produces only a demo preview without submit
     session: { ...sessionStorage },
   }));
   expect(JSON.stringify(storage)).not.toMatch(/preview-only|Тестовая/);
-  expect(Object.keys(storage.local)).toEqual(["kodu-accessibility-v1"]);
+  expect(Object.keys(storage.local).sort()).toEqual([
+    "kodu-accessibility-v1",
+    "sotsiaal-language",
+  ]);
   expect(storage.session).toEqual({
     "sotsiaal-development-notice-dismissed": "1",
   });

@@ -1,3 +1,4 @@
+import { tr } from "../i18n";
 import { useEffect, useRef, useState } from "react";
 import {
   MessageCircle,
@@ -16,7 +17,6 @@ import {
 import { getContent, organization } from "../content";
 import "./support-invitation.css";
 
-const t = getContent();
 const icons = [MessageCircle, Users, House, Footprints, Clock3, HandHeart];
 const contactCards = [
   { label: "Позвонить нам", Icon: Phone, href: `tel:${organization.phone}` },
@@ -34,6 +34,7 @@ export default function SupportInvitation({
   paused?: boolean;
   variant?: "values" | "contact";
 }) {
+  const t = getContent();
   const scene = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   const cards: { label: string; Icon: LucideIcon; href?: string }[] =
@@ -74,7 +75,7 @@ export default function SupportInvitation({
           className="eyebrow support-world-kicker"
         >
           {variant === "contact"
-            ? "ПРОСТРАНСТВО ДЛЯ ВАШЕЙ ИСТОРИИ"
+            ? tr("ПРОСТРАНСТВО ДЛЯ ВАШЕЙ ИСТОРИИ")
             : t.contact.invitation.eyebrow}
         </h2>
         <div
@@ -97,8 +98,8 @@ export default function SupportInvitation({
             className="support-world-cards"
             aria-label={
               variant === "contact"
-                ? "Контакты и полезные ссылки"
-                : "Наш подход к поддержке"
+                ? tr("Контакты и полезные ссылки")
+                : tr("Наш подход к поддержке")
             }
           >
             {cards.map(({ label, Icon, href }, index) => {
@@ -110,7 +111,7 @@ export default function SupportInvitation({
                 >
                   <Surface className="support-world-card-surface" href={href}>
                     <Icon size={25} strokeWidth={1.8} aria-hidden="true" />
-                    <span>{label}</span>
+                    <span>{tr(label)}</span>
                   </Surface>
                 </li>
               );

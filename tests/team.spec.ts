@@ -1,7 +1,7 @@
 import { expect, test, type Page } from "./fixtures";
 import { setTextSize } from "./accessibility-helpers";
 
-const team = (page: Page) => page.locator("#team");
+const team = (page: Page) => page.locator(".people-team");
 const person = (page: Page, name: string) =>
   team(page).getByRole("button", { name, exact: true });
 const panel = (page: Page, id: string) => page.locator(`#team-panel-${id}`);
@@ -9,7 +9,7 @@ const panel = (page: Page, id: string) => page.locator(`#team-panel-${id}`);
 test("team starts with Natalia expanded and switches the visible profile on click", async ({
   page,
 }) => {
-  await page.goto("/#team");
+  await page.goto("/team/");
   const natalia = person(page, "Наталья Умарова");
   const eduard = person(page, "Эдуард Ист");
   await expect(natalia).toHaveAttribute("aria-controls", "team-panel-natalia");
@@ -41,7 +41,7 @@ test("team starts with Natalia expanded and switches the visible profile on clic
 test("team supports Enter and excludes collapsed profile links from the keyboard order", async ({
   page,
 }) => {
-  await page.goto("/#team");
+  await page.goto("/team/");
   const natalia = person(page, "Наталья Умарова");
   const eduard = person(page, "Эдуард Ист");
   await eduard.focus();
@@ -72,7 +72,7 @@ test("both team profiles fit 320px and 390px screens, including increased text",
 }) => {
   for (const width of [320, 390]) {
     await page.setViewportSize({ width, height: 844 });
-    await page.goto("/#team");
+    await page.goto("/team/");
     for (const enlarged of [false, true]) {
       if (enlarged) await setTextSize(page, "125%");
       for (const [name, id] of [
@@ -109,7 +109,7 @@ test("team expansion interpolates without moving the gallery boundary on desktop
   await page.emulateMedia({ reducedMotion: "no-preference" });
   for (const width of [1440, 390]) {
     await page.setViewportSize({ width, height: 1000 });
-    await page.goto(`/?team-transition-width=${width}#team`);
+    await page.goto(`/team/?team-transition-width=${width}`);
     await page.evaluate(() => document.fonts.ready);
     await team(page).scrollIntoViewIfNeeded();
 
@@ -172,7 +172,7 @@ test("rapid team switches settle on the last selection and reduced motion switch
   for (const width of [1440, 390]) {
     await page.setViewportSize({ width, height: 1000 });
     await page.emulateMedia({ reducedMotion: "no-preference" });
-    await page.goto(`/?team-transition-width=${width}#team`);
+    await page.goto(`/team/?team-transition-width=${width}`);
     await page.evaluate(() => document.fonts.ready);
     const initial = await team(page).locator(".team-natalia").boundingBox();
 

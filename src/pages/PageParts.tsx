@@ -1,3 +1,4 @@
+import { tr } from "../i18n";
 import { ArrowRight, ArrowUpRight, ChevronRight } from "lucide-react";
 import { getContent } from "../content";
 
@@ -5,16 +6,14 @@ export type DetailPageProps = {
   onBook: (serviceId?: string) => void;
 };
 
-const t = getContent();
-
 export function PageBreadcrumb({ current }: { current: string }) {
   return (
     <nav
       className="detail-breadcrumb"
-      aria-label="Хлебные крошки"
+      aria-label={tr("Хлебные крошки")}
       data-motion="copy"
     >
-      <a href="/">Главная</a>
+      <a href="/">{tr("Главная")}</a>
       <ChevronRight size={14} aria-hidden="true" />
       <span aria-current="page">{current}</span>
     </nav>
@@ -22,6 +21,7 @@ export function PageBreadcrumb({ current }: { current: string }) {
 }
 
 export function PageBookingButton({ onClick }: { onClick: () => void }) {
+  const t = getContent();
   return (
     <button type="button" className="button button-dark" onClick={onClick}>
       {t.common.book}
@@ -31,6 +31,7 @@ export function PageBookingButton({ onClick }: { onClick: () => void }) {
 }
 
 export function PageContact({ onBook }: DetailPageProps) {
+  const t = getContent();
   return (
     <section
       className="detail-contact"
@@ -38,13 +39,15 @@ export function PageContact({ onBook }: DetailPageProps) {
       data-motion="pair"
     >
       <div className="detail-contact-copy">
-        <p className="detail-kicker">Первый шаг — в вашем ритме</p>
+        <p className="detail-kicker">{tr("Первый шаг — в вашем ритме")}</p>
         <h2 id="detail-contact-title">
-          Начнём <span>с разговора</span>
+          {tr("Начнём ")}
+          <span>{tr("с разговора")}</span>
         </h2>
         <p>
-          Не обязательно знать, какая помощь вам нужна. Расскажите о своей
-          ситуации — вместе обсудим подходящий следующий шаг.
+          {tr(
+            "Не обязательно знать, какая помощь вам нужна. Расскажите о своей ситуации — вместе обсудим подходящий следующий шаг.",
+          )}
         </p>
       </div>
       <div className="detail-contact-actions">

@@ -452,4 +452,4 @@ export const ru = {
   },
 } as const;
 
-export type Service = (typeof ru.services)[number];
+export type Service = import("../i18n").Localized<(typeof ru.services)[number]>;

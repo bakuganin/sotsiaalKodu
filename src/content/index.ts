@@ -1,10 +1,14 @@
 import { ru } from "./ru";
+import { defaultLocale, getLocale, localize, type Locale } from "../i18n";
 
-// Add approved translation dictionaries here. Untranslated locales are never advertised as available.
-export const locales = { ru };
-export type Locale = keyof typeof locales;
-export const defaultLocale: Locale = "ru";
-export function getContent(locale: Locale = defaultLocale) {
+export { defaultLocale };
+export type { Locale };
+export const locales = {
+  et: { ...localize(ru, "et"), locale: "et" },
+  ru,
+  en: { ...localize(ru, "en"), locale: "en" },
+};
+export function getContent(locale: Locale = getLocale()) {
   return locales[locale];
 }
 

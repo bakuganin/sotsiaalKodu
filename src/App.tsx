@@ -1,3 +1,4 @@
+import { tr, useLocale } from "./i18n";
 import "./editorial-redesign.css";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -40,14 +41,12 @@ import ContactPage from "./pages/ContactPage";
 import LegalPage, { legalPages } from "./pages/LegalPage";
 import pageMeta from "./content/page-meta.json";
 
-const t = getContent();
-
 function Brand({ footer = false }: { footer?: boolean }) {
   return (
     <a
       className={`brand${footer ? " brand-footer" : ""}`}
       href="/"
-      aria-label={`${organization.publicName} — на главную`}
+      aria-label={`${organization.publicName} — ${tr("На главную")}`}
     >
       <BrandArtwork />
     </a>
@@ -68,6 +67,8 @@ function ServiceArt({ type }: { type: Service["icon"] }) {
 }
 
 export default function App() {
+  const locale = useLocale();
+  const t = getContent();
   const siteRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLElement>(null);
   const contentDialog = useRef<ContentDialogHandle>(null);
@@ -96,11 +97,11 @@ export default function App() {
     document.documentElement.lang = t.locale;
     document.title = service
       ? `${service.shortTitle} — ${organization.publicName}`
-      : pageMeta[page].title;
+      : tr(pageMeta[page].title);
     document
       .querySelector('meta[name="description"]')
-      ?.setAttribute("content", pageMeta[page].description);
-  }, [service, page]);
+      ?.setAttribute("content", tr(pageMeta[page].description));
+  }, [service, page, locale]);
 
   useEffect(
     () => () => {
@@ -490,7 +491,7 @@ export default function App() {
 
               <section
                 className="support-situations container"
-                aria-label="С чем можно к нам прийти"
+                aria-label={tr("С чем можно к нам прийти")}
               >
                 {t.supportSituations.map((item) => (
                   <article
@@ -576,7 +577,7 @@ export default function App() {
                     <House size={20} />
                     <div>
                       <small>{t.contact.legalAddress}</small>
-                      <p>{organization.legalAddress}</p>
+                      <p>{tr(organization.legalAddress)}</p>
                       <span>{t.contact.visitNote}</span>
                     </div>
                   </div>
@@ -615,13 +616,14 @@ export default function App() {
           />
           <div className="meadow-content">
             <div className="meadow-invitation" data-motion="copy">
-              <h2>Вместе легче сделать шаг</h2>
+              <h2>{tr("Вместе легче сделать шаг")}</h2>
               <button
                 className="meadow-action"
                 onClick={() => openBooking()}
                 aria-haspopup="dialog"
               >
-                Давайте поговорим <ArrowUpRight size={20} aria-hidden="true" />
+                {tr("Давайте поговорим ")}
+                <ArrowUpRight size={20} aria-hidden="true" />
               </button>
             </div>
             <div className="meadow-info" data-motion="copy">
@@ -636,9 +638,12 @@ export default function App() {
                 <a href={`mailto:${organization.email}`}>
                   {organization.email}
                 </a>
-                <address>{organization.legalAddress}</address>
+                <address>{tr(organization.legalAddress)}</address>
               </div>
-              <nav className="meadow-links" aria-label="Навигация в подвале">
+              <nav
+                className="meadow-links"
+                aria-label={tr("Навигация в подвале")}
+              >
                 {t.header.nav.map((item) => (
                   <a
                     key={item.id}
@@ -655,10 +660,13 @@ export default function App() {
                 ))}
               </nav>
             </div>
-            <nav className="meadow-documents" aria-label="Правовая информация">
+            <nav
+              className="meadow-documents"
+              aria-label={tr("Правовая информация")}
+            >
               {legalPages.map(({ id, label }) => (
                 <a key={id} href={`/${id}/`}>
-                  {label}
+                  {tr(label)}
                 </a>
               ))}
             </nav>

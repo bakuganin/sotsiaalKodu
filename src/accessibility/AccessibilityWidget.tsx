@@ -1,3 +1,4 @@
+import { localize } from "../i18n";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { PersonStanding, RotateCcw, X } from "lucide-react";
@@ -8,7 +9,7 @@ import {
   writePreferences,
   type AccessibilityPreferences,
 } from "./preferences";
-import { accessibilityCopy as copy } from "./ru";
+import { accessibilityCopy } from "./ru";
 
 const CLOSE_FALLBACK_MS = 340;
 const prefersReducedMotion = () =>
@@ -16,6 +17,7 @@ const prefersReducedMotion = () =>
   document.documentElement.dataset.a11yReduceMotion === "true";
 
 export default function AccessibilityWidget() {
+  const copy = localize(accessibilityCopy);
   const [preferences, setPreferences] = useState(readPreferences);
   const [isOpen, setIsOpen] = useState(false);
   const [visible, setVisible] = useState(false);

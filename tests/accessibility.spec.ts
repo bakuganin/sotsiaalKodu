@@ -174,7 +174,9 @@ test("all preferences persist after reload and reset restores the original appea
   );
   await expect(paragraph).toHaveCSS("cursor", /url\(/);
   await expect(page.locator(".hero-image img")).not.toBeVisible();
+  await page.goto("/team/");
   await expect(page.locator(".team-photo").first()).toBeVisible();
+  await page.goto("/");
   const guide = page.locator(".a11y-reading-guide");
   await expect(guide).toBeVisible();
   await expect(guide).toHaveCSS("pointer-events", "none");
@@ -351,12 +353,12 @@ test("the motion preference stops team transitions even without an OS motion pre
   await page.emulateMedia({ reducedMotion: "no-preference" });
   for (const width of [1440, 390]) {
     await page.setViewportSize({ width, height: 1000 });
-    await page.goto("/#team");
+    await page.goto("/team/");
     await waitForSiteReady(page);
     const dialog = await openAccessibility(page);
     await dialog.getByRole("checkbox", { name: "Меньше движения" }).check();
     await closeAccessibility(page);
-    const section = page.locator("#team");
+    const section = page.locator(".people-team");
     await section.scrollIntoViewIfNeeded();
     const running = await section.evaluate(async (node) => {
       node

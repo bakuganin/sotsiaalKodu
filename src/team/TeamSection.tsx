@@ -1,9 +1,8 @@
+import { tr } from "../i18n";
 import { useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { ArrowUpRight, BookOpen, Plus, Scale } from "lucide-react";
 import { getContent } from "../content";
 import "./team.css";
-
-const t = getContent();
 
 type TeamGalleryProps = {
   onBook: () => void;
@@ -16,6 +15,7 @@ export function TeamGallery({
   memberAnchors = false,
   nameHeadingLevel = 3,
 }: TeamGalleryProps) {
+  const t = getContent();
   const NameHeading = nameHeadingLevel === 2 ? "h2" : "h3";
   const [activeId, setActiveId] = useState<string>(() => {
     const member = memberAnchors
@@ -185,11 +185,11 @@ export default function TeamSection() {
       aria-labelledby="team-title"
     >
       <div id="team" className="community-rail" data-motion="copy">
-        <p className="eyebrow">КОМАНДА И ВСТРЕЧИ</p>
+        <p className="eyebrow">{tr("КОМАНДА И ВСТРЕЧИ")}</p>
         <p>
-          Быть рядом
+          {tr("Быть рядом")}
           <br />
-          <span>Находить опору вместе</span>
+          <span>{tr("Находить опору вместе")}</span>
         </p>
       </div>
       <div className="community-body">
@@ -198,7 +198,8 @@ export default function TeamSection() {
           className="editorial-statement"
           data-motion="heading"
         >
-          Мы помогаем <span>найти опору</span>{" "}
+          {tr("Мы помогаем ")}
+          <span>{tr("найти опору")}</span>{" "}
           <span className="statement-phrase">
             <img
               className="statement-art statement-leaves"
@@ -208,10 +209,11 @@ export default function TeamSection() {
               height="512"
               loading="lazy"
             />{" "}
-            слушаем
+            {tr("слушаем")}
           </span>{" "}
-          вашу историю, вместе ищем <span>подходящую помощь</span> и создаём
-          встречи{" "}
+          {tr("вашу историю, вместе ищем ")}
+          <span>{tr("подходящую помощь")}</span>
+          {tr(" и создаём встречи")}{" "}
           <span className="statement-phrase">
             <img
               className="statement-art statement-round"
@@ -221,13 +223,14 @@ export default function TeamSection() {
               height="560"
               loading="lazy"
             />{" "}
-            где
+            {tr("где")}
           </span>{" "}
-          можно <span>учиться друг у друга</span>
+          {tr("можно ")}
+          <span>{tr("учиться друг у друга")}</span>
         </h2>
         <div className="community-footer" data-motion="copy">
           <a className="community-link" href="/team/">
-            Познакомиться с командой{" "}
+            {tr("Познакомиться с командой")}{" "}
             <ArrowUpRight size={20} aria-hidden="true" />
           </a>
         </div>

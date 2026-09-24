@@ -114,7 +114,13 @@ test("browser storage disclosure matches the app and does not add tracking", asy
     local: Object.keys(localStorage),
     session: Object.keys(sessionStorage),
   }));
-  expect(storage.local).toEqual(["kodu-accessibility-v1"]);
+  await expect(page.locator(".legal-content")).toContainText(
+    "sotsiaal-language",
+  );
+  expect(storage.local.sort()).toEqual([
+    "kodu-accessibility-v1",
+    "sotsiaal-language",
+  ]);
   expect(storage.session).toEqual(["sotsiaal-development-notice-dismissed"]);
   expect([...hosts]).toEqual(["127.0.0.1"]);
 });

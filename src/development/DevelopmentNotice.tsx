@@ -1,3 +1,4 @@
+import { tr } from "../i18n";
 import { useCallback, useId, useRef } from "react";
 import { BrandSymbol } from "../brand/BrandArtwork";
 import { organization } from "../content";
@@ -5,6 +6,7 @@ import ContentDialog, {
   type ContentDialogHandle,
 } from "../dialog/ContentDialog";
 import "./development-notice.css";
+import LanguageSwitcher from "../navigation/LanguageSwitcher";
 
 export const DEVELOPMENT_NOTICE_KEY = "sotsiaal-development-notice-dismissed";
 
@@ -42,12 +44,13 @@ export default function DevelopmentNotice({
       open={open}
       contentKey="development-notice"
       onClose={acknowledge}
-      closeLabel="Закрыть предупреждение и перейти на сайт"
-      title="Сайт ещё в разработке"
+      closeLabel={tr("Закрыть предупреждение и перейти на сайт")}
+      title={tr("Сайт ещё в разработке")}
       descriptionId={descriptionId}
       className="development-notice"
       header={
         <div className="development-notice-header">
+          <LanguageSwitcher />
           <div className="development-notice-badge" aria-hidden="true">
             <svg viewBox="0 0 128 128" fill="currentColor" focusable="false">
               <BrandSymbol />
@@ -58,18 +61,19 @@ export default function DevelopmentNotice({
       }
     >
       <p id={descriptionId} className="development-notice-description">
-        Мы постепенно обновляем сайт. Некоторые разделы и функции пока могут
-        работать не полностью.
+        {tr(
+          "Мы постепенно обновляем сайт. Некоторые разделы и функции пока могут работать не полностью.",
+        )}
       </p>
       <button
         type="button"
         className="development-notice-continue"
         onClick={() => dialogRef.current?.close(acknowledge)}
       >
-        Перейти на сайт
+        {tr("Перейти на сайт")}
       </button>
       <p className="development-notice-contact">
-        <span>Связаться с нами: </span>
+        <span>{tr("Связаться с нами: ")}</span>
         <a href={`tel:${organization.phone}`}>{organization.phoneDisplay}</a>
       </p>
     </ContentDialog>

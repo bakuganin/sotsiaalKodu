@@ -1,20 +1,14 @@
+import { tr } from "../i18n";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { MouseEvent } from "react";
-import {
-  ArrowRight,
-  ArrowUpRight,
-  ChevronDown,
-  Globe2,
-  Menu,
-  X,
-} from "lucide-react";
+import { ArrowRight, ArrowUpRight, ChevronDown, Menu, X } from "lucide-react";
 import { BrandArtwork } from "../brand/BrandArtwork";
 import { serviceArtwork } from "../brand/serviceArtwork";
 import { getContent, organization } from "../content";
 import type { SitePage } from "./useSiteRoute";
 import "./navigation.css";
+import LanguageSwitcher from "./LanguageSwitcher";
 
-const t = getContent();
 const MENU_CLOSE_MS = 300;
 const HOVER_LEAVE_MS = 160;
 
@@ -40,19 +34,11 @@ function BrandLink({
     <a
       className="sk-brand"
       href="/"
-      aria-label={`${organization.publicName} — на главную`}
+      aria-label={`${organization.publicName} — ${tr("На главную")}`}
       onClick={onClick}
     >
       <BrandArtwork />
     </a>
-  );
-}
-
-function Language() {
-  return (
-    <span className="sk-language" aria-label={t.header.language}>
-      <Globe2 size={17} aria-hidden="true" /> RU
-    </span>
   );
 }
 
@@ -61,6 +47,7 @@ export default function SiteHeader({
   activeSection,
   onBook,
 }: SiteHeaderProps) {
+  const t = getContent();
   const [megaOpen, setMegaOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileVisible, setMobileVisible] = useState(false);
@@ -339,7 +326,7 @@ export default function SiteHeader({
                   {t.common.allServices}
                   <ArrowRight size={19} aria-hidden="true" />
                 </a>
-                <span>Найдём поддержку вместе.</span>
+                <span>{tr("Найдём поддержку вместе.")}</span>
                 <button
                   className="sk-mega-book"
                   onClick={() => {
@@ -373,7 +360,7 @@ export default function SiteHeader({
           ))}
         </nav>
         <div className="sk-header-actions">
-          <Language />
+          <LanguageSwitcher />
           <button className="sk-header-book" onClick={onBook}>
             {t.common.book}
             <ArrowUpRight size={17} aria-hidden="true" />
@@ -429,7 +416,7 @@ export default function SiteHeader({
         <div className="sk-mobile-top">
           <BrandLink onClick={followMobileLink} />
           <div className="sk-mobile-top-actions">
-            <Language />
+            <LanguageSwitcher />
             <button
               className="sk-mobile-close"
               aria-label={t.header.closeMenu}
@@ -441,8 +428,8 @@ export default function SiteHeader({
           </div>
         </div>
         <div className="sk-mobile-content">
-          <p className="sk-mobile-label">Пространство заботы</p>
-          <nav className="sk-mobile-nav" aria-label="Разделы сайта">
+          <p className="sk-mobile-label">{tr("Пространство заботы")}</p>
+          <nav className="sk-mobile-nav" aria-label={tr("Разделы сайта")}>
             <div className="sk-mobile-services">
               <button
                 className="sk-mobile-link"
@@ -453,7 +440,7 @@ export default function SiteHeader({
                 <span className="sk-mobile-number" aria-hidden="true">
                   01
                 </span>
-                <span>Услуги</span>
+                <span>{tr("Услуги")}</span>
                 <ChevronDown size={25} aria-hidden="true" />
               </button>
               <div
