@@ -3,13 +3,13 @@ import { expect, test } from "./fixtures";
 test.use({ reducedMotion: "no-preference" });
 
 for (const width of [1440, 390]) {
-  test(`contact panels reveal without changing geometry or replaying at ${width}px`, async ({
+  test(`contact composition reveals without changing geometry or replaying at ${width}px`, async ({
     page,
   }, testInfo) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
     await page.evaluate(() => document.fonts.ready);
-    const pair = page.locator(".contact-panels");
+    const pair = page.locator(".support-invitation");
     await expect(pair).toHaveAttribute("data-motion-state", "pending");
 
     const samples = await pair.evaluate(async (element) => {
@@ -95,12 +95,12 @@ for (const width of [1440, 390]) {
   });
 }
 
-test("reduced motion shows the contact panels immediately", async ({
+test("reduced motion shows the contact composition immediately", async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  const pair = page.locator(".contact-panels");
+  const pair = page.locator(".support-invitation");
   await pair.scrollIntoViewIfNeeded();
   await expect(pair).toHaveAttribute("data-motion-state", "settled");
   for (const panel of await pair.locator(":scope > *").all()) {

@@ -21,6 +21,7 @@ import DevelopmentNotice, {
 } from "./development/DevelopmentNotice";
 import TeamSection from "./team/TeamSection";
 import ProcessSection from "./process/ProcessSection";
+import SupportInvitation from "./contact/SupportInvitation";
 import PrinciplesScene from "./principles/PrinciplesScene";
 import IntroComposition from "./motion/IntroComposition";
 import useSiteMotion from "./motion/useSiteMotion";
@@ -517,36 +518,7 @@ export default function App() {
             </div>
 
             <section id="contact" className="contact-section">
-              <div className="contact-panels" data-motion="pair">
-                <div className="contact-visual">
-                  <span className="eyebrow">{t.calm.heroLabel}</span>
-                  <img
-                    src="/images/calm-home.webp"
-                    alt=""
-                    width="1254"
-                    height="1254"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="contact-heading">
-                  <p className="eyebrow">{t.contact.eyebrow}</p>
-                  <h2>
-                    {t.calm.contactFirst}
-                    <br />
-                    <span>{t.calm.contactAccent}</span>
-                    <br />
-                    {t.calm.contactLast}
-                  </h2>
-                  <p>{t.contact.description}</p>
-                  <button className="pill-button" onClick={() => openBooking()}>
-                    <span>{t.common.book}</span>
-                    <span className="pill-arrow">
-                      <ArrowRight size={23} />
-                    </span>
-                  </button>
-                  <span className="booking-note">{t.contact.bookNote}</span>
-                </div>
-              </div>
+              <SupportInvitation onBook={() => openBooking()} />
               <div className="contact-bottom container">
                 <div className="center-heading" data-motion="heading">
                   <SectionIcon variant="contact" />

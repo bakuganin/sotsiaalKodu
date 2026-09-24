@@ -1,0 +1,242 @@
+.support-invitation {
+  width: min(var(--hero-width), calc(100% - var(--hero-gutter) * 2));
+  margin-inline: auto;
+  border-radius: 40px;
+  background: #fafbf7;
+  color: #11150d;
+  overflow: hidden;
+  container-type: inline-size;
+}
+.support-world {
+  padding-top: 36px;
+}
+.support-world-kicker {
+  text-align: center;
+  margin: 0;
+  color: #616a56;
+}
+.support-world-scene {
+  height: clamp(500px, 43vw, 650px);
+  position: relative;
+  isolation: isolate;
+}
+.support-world-word {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  font-family: var(--heading);
+  font-size: 23cqw;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.08em;
+  padding-right: 0.08em;
+  color: #17200f;
+  user-select: none;
+}
+.support-world-image {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(48%, 620px);
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+  z-index: 1;
+  filter: drop-shadow(0 20px 20px #1f36091c);
+}
+.support-world-cards {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.support-world-card {
+  position: absolute;
+  z-index: 2;
+  width: clamp(104px, 9vw, 140px);
+  min-height: 116px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  text-align: center;
+  padding: 15px 12px;
+  border: 1px solid #ffffffbd;
+  border-radius: 19px;
+  background: linear-gradient(135deg, #ffffffbc, #eff2e1a8);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 8px 28px #142a0910;
+  color: #222e16;
+  font-size: 0.8rem;
+  line-height: 1.3;
+}
+.support-world-card svg {
+  flex-shrink: 0;
+}
+.support-world-card span {
+  max-width: 12ch;
+}
+.support-world-card-1 {
+  left: 25%;
+  top: 4%;
+}
+.support-world-card-2 {
+  right: 23%;
+  top: 7%;
+}
+.support-world-card-3 {
+  left: 10%;
+  top: 39%;
+}
+.support-world-card-4 {
+  right: 9%;
+  top: 41%;
+}
+.support-world-card-5 {
+  left: 25%;
+  bottom: 5%;
+}
+.support-world-card-6 {
+  right: 24%;
+  bottom: 3%;
+}
+.support-invitation-copy {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 32px;
+  border-top: 1px solid #2a38151a;
+  padding: 32px clamp(28px, 5vw, 80px) 40px;
+}
+.support-invitation-copy h2 {
+  font-family: var(--heading);
+  font-size: clamp(1.8rem, 2.5vw, 2.6rem);
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  line-height: 1.15;
+  margin: 0 0 12px;
+}
+.support-invitation-copy > div > p:not(.booking-note) {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #5b6650;
+  max-width: 45ch;
+  margin: 0;
+}
+.support-invitation-action {
+  flex-shrink: 0;
+}
+.support-invitation-action .booking-note {
+  margin: 12px 0 0;
+  font-size: 0.75rem;
+}
+@media (max-width: 760px) {
+  .support-invitation {
+    border-radius: 28px;
+  }
+  .support-world {
+    padding-top: 28px;
+  }
+  .support-world-kicker {
+    font-size: 0.7rem;
+  }
+  .support-world-scene {
+    height: 650px;
+    overflow: clip;
+  }
+  .support-world-word {
+    font-size: clamp(96px, 28cqw, 108px);
+    letter-spacing: -0.06em;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    line-height: 0.8;
+    opacity: 0.9;
+  }
+  .support-world-image {
+    width: min(94%, 480px);
+    top: 48%;
+  }
+  .support-world-card {
+    width: 96px;
+    min-height: 98px;
+    padding: 12px 8px;
+    border-radius: 15px;
+    font-size: 0.72rem;
+    gap: 8px;
+  }
+  .support-world-card svg {
+    width: 22px;
+    height: 22px;
+  }
+  .support-world-card-1 {
+    left: 8%;
+    top: 6%;
+  }
+  .support-world-card-2 {
+    right: 7%;
+    top: 16%;
+  }
+  .support-world-card-3 {
+    left: 2%;
+    top: 37%;
+  }
+  .support-world-card-4 {
+    right: 2%;
+    top: 51%;
+  }
+  .support-world-card-5 {
+    left: 8%;
+    bottom: 9%;
+  }
+  .support-world-card-6 {
+    right: 8%;
+    bottom: 1%;
+  }
+  .support-invitation-copy {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 28px 24px 32px;
+    gap: 24px;
+  }
+  .support-invitation-action {
+    flex-shrink: 1;
+  }
+  .support-invitation-action .pill-button {
+    max-width: 100%;
+  }
+}
+:root:is([data-a11y-text-size="150"], [data-a11y-text-size="200"])
+  .support-world-scene {
+  height: auto;
+}
+:root:is([data-a11y-text-size="150"], [data-a11y-text-size="200"])
+  .support-world-word {
+  display: none;
+}
+:root:is([data-a11y-text-size="150"], [data-a11y-text-size="200"])
+  .support-world-image {
+  position: relative;
+  left: auto;
+  top: auto;
+  transform: none;
+  display: block;
+  margin: auto;
+}
+:root:is([data-a11y-text-size="150"], [data-a11y-text-size="200"])
+  .support-world-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px;
+}
+:root:is([data-a11y-text-size="150"], [data-a11y-text-size="200"])
+  .support-world-card {
+  position: static;
+  flex: 1 1 160px;
+}
