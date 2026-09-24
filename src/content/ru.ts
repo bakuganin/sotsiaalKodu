@@ -82,9 +82,9 @@ export const ru = {
       { value: "В вашем ритме", label: "с уважением к самостоятельности" },
     ],
     servicesFirst: "Разная помощь",
-    servicesAccent: "Одна цель —",
+    servicesAccent: "Одна цель",
     servicesLast: "ваше благополучие",
-    valuesFirst: "В основе заботы —",
+    valuesFirst: "В основе заботы",
     valuesAccent: "внимание",
     valuesLast: "к человеку",
     valuesDescription:
