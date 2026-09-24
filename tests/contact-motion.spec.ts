@@ -14,7 +14,7 @@ for (const width of [1440, 390]) {
 
     const samples = await pair.evaluate(async (element) => {
       const pair = element as HTMLElement;
-      const layers = [...pair.children] as HTMLElement[];
+      const layers = [pair];
       const starts: string[] = [];
       pair.addEventListener("animationstart", (event) => {
         if (
@@ -67,11 +67,11 @@ for (const width of [1440, 390]) {
       contentType: "application/json",
     });
     expect(samples.frames.some(({ state }) => state === "running")).toBe(true);
-    expect(samples.starts).toHaveLength(2);
+    expect(samples.starts).toHaveLength(1);
     expect(
       Math.max(...samples.frames.map(({ overflow }) => overflow)),
     ).toBeLessThanOrEqual(1);
-    for (const index of [0, 1]) {
+    for (const index of [0]) {
       for (const property of ["width", "height", "x"] as const) {
         const values = samples.frames.map(
           (frame) => frame.layers[index][property],
@@ -103,9 +103,81 @@ test("reduced motion shows the contact composition immediately", async ({
   const pair = page.locator(".support-invitation");
   await pair.scrollIntoViewIfNeeded();
   await expect(pair).toHaveAttribute("data-motion-state", "settled");
-  for (const panel of await pair.locator(":scope > *").all()) {
-    await expect(panel).toHaveCSS("opacity", "1");
-    await expect(panel).toHaveCSS("animation-name", "none");
-    await expect(panel).toHaveCSS("clip-path", "none");
-  }
+  await expect(pair).toHaveCSS("opacity", "1");
+  await expect(pair).toHaveCSS("animation-name", "none");
+  await expect(pair).toHaveCSS("clip-path", "none");
+});
+
+test("support cards follow the mouse, return to rest and respect motion preferences", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/");
+  const section = page.locator(".support-invitation");
+  await section.scrollIntoViewIfNeeded();
+  await expect(section).toHaveAttribute("data-motion-state", "settled");
+  await expect(section).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  await expect(section.getByRole("button")).toHaveCount(0);
+  await expect(section).not.toContainText("Первый шаг к поддержке");
+
+  const card = section.locator(".support-world-card").nth(3);
+  const surface = card.locator(".support-world-card-surface");
+  await expect(surface).toHaveCSS("font-weight", "600");
+  const original = await card.boundingBox();
+  await card.hover({ position: { x: 18, y: 22 } });
+  await expect
+    .poll(() => surface.evaluate((e) => getComputedStyle(e).transform))
+    .not.toBe("none");
+  const firstTransform = await surface.evaluate(
+    (e) => getComputedStyle(e).transform,
+  );
+  await expect
+    .poll(() =>
+      card.evaluate((e) =>
+        parseFloat(e.style.getPropertyValue("--card-rotate-y")),
+      ),
+    )
+    .toBeLessThan(0);
+  await card.hover({
+    position: { x: original!.width - 18, y: original!.height - 22 },
+  });
+  await expect
+    .poll(() =>
+      card.evaluate((e) =>
+        parseFloat(e.style.getPropertyValue("--card-rotate-y")),
+      ),
+    )
+    .toBeGreaterThan(0);
+  await expect
+    .poll(() => surface.evaluate((e) => getComputedStyle(e).transform))
+    .not.toBe(firstTransform);
+  expect(await card.boundingBox()).toEqual(original);
+
+  await page.mouse.move(0, 0);
+  await expect(surface).toHaveCSS("transform", "none");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await card.hover();
+  await expect(surface).toHaveCSS("transform", "none");
+
+  await page.mouse.move(0, 0);
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.evaluate(
+    () => (document.documentElement.dataset.a11yReduceMotion = "true"),
+  );
+  await card.hover();
+  await expect(surface).toHaveCSS("transform", "none");
+
+  await page.mouse.move(0, 0);
+  await page.evaluate(
+    () => (document.documentElement.dataset.a11yReduceMotion = "false"),
+  );
+  await card.dispatchEvent("pointermove", {
+    pointerType: "touch",
+    clientX: 20,
+    clientY: 20,
+  });
+  await expect(surface).toHaveCSS("transform", "none");
+  expect(
+    await card.evaluate((e) => e.style.getPropertyValue("--card-rotate-y")),
+  ).toBe("");
 });

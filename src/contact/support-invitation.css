@@ -1,19 +1,24 @@
 .support-invitation {
   width: min(var(--hero-width), calc(100% - var(--hero-gutter) * 2));
   margin-inline: auto;
-  border-radius: 40px;
-  background: #fafbf7;
-  color: #11150d;
-  overflow: hidden;
+  background: transparent;
+  color: #f4f5ef;
   container-type: inline-size;
+}
+.support-invitation[data-motion="copy"][data-motion-state="running"] {
+  animation-name: site-page-left;
+  animation-duration: 1150ms;
+  animation-timing-function: var(--motion-organic);
 }
 .support-world {
   padding-top: 36px;
 }
-.support-world-kicker {
+.support-world .support-world-kicker {
   text-align: center;
   margin: 0;
-  color: #616a56;
+  color: #bfc7b4;
+  font-size: 0.75rem;
+  font-weight: 500;
 }
 .support-world-scene {
   height: clamp(500px, 43vw, 650px);
@@ -33,7 +38,7 @@
   line-height: 1;
   letter-spacing: -0.08em;
   padding-right: 0.08em;
-  color: #17200f;
+  color: #24311a;
   user-select: none;
 }
 .support-world-image {
@@ -56,24 +61,54 @@
 .support-world-card {
   position: absolute;
   z-index: 2;
-  width: clamp(104px, 9vw, 140px);
-  min-height: 116px;
+  width: clamp(120px, 10.5vw, 156px);
+}
+.support-world-card-surface {
+  min-height: 128px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 11px;
   text-align: center;
-  padding: 15px 12px;
+  padding: 17px 12px;
   border: 1px solid #ffffffbd;
   border-radius: 19px;
-  background: linear-gradient(135deg, #ffffffbc, #eff2e1a8);
+  background: linear-gradient(135deg, #fffffff2, #e0e6d7de);
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
-  box-shadow: 0 8px 28px #142a0910;
-  color: #222e16;
-  font-size: 0.8rem;
-  line-height: 1.3;
+  box-shadow: 0 10px 28px #00000030;
+  color: #182011;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.4;
+  pointer-events: none;
+  transition:
+    transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 300ms ease,
+    border-color 300ms ease;
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  :root:not([data-a11y-reduce-motion="true"])
+    .support-world-card:hover
+    .support-world-card-surface {
+    transform: perspective(650px)
+      translate3d(
+        var(--card-drift-x, 0px),
+        calc(-9px + var(--card-drift-y, 0px)),
+        0
+      )
+      rotateX(var(--card-rotate-x, 0deg)) rotateY(var(--card-rotate-y, 0deg));
+    border-color: #ffffff;
+    box-shadow:
+      0 22px 38px #00000055,
+      0 0 28px #b9d48f18;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .support-world-card-surface {
+    transition: none;
+  }
 }
 .support-world-card svg {
   flex-shrink: 0;
@@ -105,44 +140,11 @@
   right: 24%;
   bottom: 3%;
 }
-.support-invitation-copy {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 32px;
-  border-top: 1px solid #2a38151a;
-  padding: 32px clamp(28px, 5vw, 80px) 40px;
-}
-.support-invitation-copy h2 {
-  font-family: var(--heading);
-  font-size: clamp(1.8rem, 2.5vw, 2.6rem);
-  font-weight: 500;
-  letter-spacing: -0.045em;
-  line-height: 1.15;
-  margin: 0 0 12px;
-}
-.support-invitation-copy > div > p:not(.booking-note) {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: #5b6650;
-  max-width: 45ch;
-  margin: 0;
-}
-.support-invitation-action {
-  flex-shrink: 0;
-}
-.support-invitation-action .booking-note {
-  margin: 12px 0 0;
-  font-size: 0.75rem;
-}
 @media (max-width: 760px) {
-  .support-invitation {
-    border-radius: 28px;
-  }
   .support-world {
     padding-top: 28px;
   }
-  .support-world-kicker {
+  .support-world .support-world-kicker {
     font-size: 0.7rem;
   }
   .support-world-scene {
@@ -162,11 +164,13 @@
     top: 48%;
   }
   .support-world-card {
-    width: 96px;
-    min-height: 98px;
+    width: 104px;
+  }
+  .support-world-card-surface {
+    min-height: 110px;
     padding: 12px 8px;
     border-radius: 15px;
-    font-size: 0.72rem;
+    font-size: 0.8rem;
     gap: 8px;
   }
   .support-world-card svg {
@@ -196,18 +200,6 @@
   .support-world-card-6 {
     right: 8%;
     bottom: 1%;
-  }
-  .support-invitation-copy {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 28px 24px 32px;
-    gap: 24px;
-  }
-  .support-invitation-action {
-    flex-shrink: 1;
-  }
-  .support-invitation-action .pill-button {
-    max-width: 100%;
   }
 }
 :root:is([data-a11y-text-size="150"], [data-a11y-text-size="200"])

@@ -1,5 +1,5 @@
+import type { PointerEvent } from "react";
 import {
-  ArrowRight,
   MessageCircle,
   Users,
   House,
@@ -13,17 +13,50 @@ import "./support-invitation.css";
 const t = getContent();
 const icons = [MessageCircle, Users, House, Footprints, Clock3, HandHeart];
 
-export default function SupportInvitation({ onBook }: { onBook: () => void }) {
+function tiltCard(event: PointerEvent<HTMLLIElement>) {
+  if (
+    event.pointerType !== "mouse" ||
+    !matchMedia("(hover: hover) and (pointer: fine)").matches ||
+    matchMedia("(prefers-reduced-motion: reduce)").matches ||
+    document.documentElement.dataset.a11yReduceMotion === "true"
+  )
+    return;
+
+  const card = event.currentTarget;
+  const bounds = card.getBoundingClientRect();
+  const x = Math.max(
+    -1,
+    Math.min(1, ((event.clientX - bounds.left) / bounds.width - 0.5) * 2),
+  );
+  const y = Math.max(
+    -1,
+    Math.min(1, ((event.clientY - bounds.top) / bounds.height - 0.5) * 2),
+  );
+  card.style.setProperty("--card-rotate-x", `${-y * 8}deg`);
+  card.style.setProperty("--card-rotate-y", `${x * 8}deg`);
+  card.style.setProperty("--card-drift-x", `${x * 4}px`);
+  card.style.setProperty("--card-drift-y", `${y * 3}px`);
+}
+
+function resetCard(event: PointerEvent<HTMLLIElement>) {
+  for (const property of ["rotate-x", "rotate-y", "drift-x", "drift-y"])
+    event.currentTarget.style.removeProperty(`--card-${property}`);
+}
+
+export default function SupportInvitation() {
   return (
     <div
       className="support-invitation"
-      data-motion="pair"
+      data-motion="copy"
       aria-labelledby="support-invitation-title"
     >
       <div className="support-world">
-        <p className="eyebrow support-world-kicker">
+        <h2
+          id="support-invitation-title"
+          className="eyebrow support-world-kicker"
+        >
           {t.contact.invitation.eyebrow}
-        </p>
+        </h2>
         <div className="support-world-scene">
           <p className="support-world-word" aria-hidden="true">
             ОПОРА
@@ -46,33 +79,18 @@ export default function SupportInvitation({ onBook }: { onBook: () => void }) {
                 <li
                   className={`support-world-card support-world-card-${index + 1}`}
                   key={label}
+                  onPointerMove={tiltCard}
+                  onPointerLeave={resetCard}
+                  onPointerCancel={resetCard}
                 >
-                  <Icon size={24} strokeWidth={1.5} aria-hidden="true" />
-                  <span>{label}</span>
+                  <div className="support-world-card-surface">
+                    <Icon size={25} strokeWidth={1.8} aria-hidden="true" />
+                    <span>{label}</span>
+                  </div>
                 </li>
               );
             })}
           </ul>
-        </div>
-      </div>
-      <div className="support-invitation-copy">
-        <div>
-          <h2 id="support-invitation-title">{t.contact.invitation.title}</h2>
-          <p>{t.contact.description}</p>
-        </div>
-        <div className="support-invitation-action">
-          <button
-            className="pill-button"
-            type="button"
-            onClick={onBook}
-            aria-haspopup="dialog"
-          >
-            <span>{t.common.book}</span>
-            <span className="pill-arrow">
-              <ArrowRight size={23} aria-hidden="true" />
-            </span>
-          </button>
-          <p className="booking-note">{t.contact.bookNote}</p>
         </div>
       </div>
     </div>

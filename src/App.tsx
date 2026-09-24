@@ -518,7 +518,7 @@ export default function App() {
             </div>
 
             <section id="contact" className="contact-section">
-              <SupportInvitation onBook={() => openBooking()} />
+              <SupportInvitation />
               <div className="contact-bottom container">
                 <div className="center-heading" data-motion="heading">
                   <SectionIcon variant="contact" />

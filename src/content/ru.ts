@@ -409,7 +409,6 @@ export const ru = {
   contact: {
     invitation: {
       eyebrow: "ПРОСТРАНСТВО ЗАБОТЫ",
-      title: "Первый шаг к поддержке",
       values: [
         "Ваша история",
         "Семья и близкие",
