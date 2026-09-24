@@ -41,7 +41,13 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, #08100ec9, #08100e30 65%, #08100e99);
+  background: linear-gradient(
+    180deg,
+    #08100ec9,
+    #08100ea6 45%,
+    #08100e30 75%,
+    #08100e99
+  );
   z-index: -1;
 }
 .process-cover h2 {
@@ -261,6 +267,15 @@
     min-height: 390px;
     border-radius: 28px;
     padding: 28px;
+  }
+  .process-cover::after {
+    background: linear-gradient(
+      180deg,
+      #08100ec9,
+      #08100ea6 65%,
+      #08100e30 85%,
+      #08100e99
+    );
   }
   .process-cover h2 {
     max-width: 13ch;

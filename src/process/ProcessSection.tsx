@@ -13,9 +13,9 @@ import "./process.css";
 
 const icons = [MessageCircle, Sprout, CalendarDays];
 const artwork = [
-  { cover: "forest", detail: "conversation" },
-  { cover: "support-cover", detail: "support-detail" },
-  { cover: "meeting-cover", detail: "meeting-detail" },
+  { cover: "conversation", detail: "forest" },
+  { cover: "support-detail", detail: "support-cover" },
+  { cover: "meeting-detail", detail: "meeting-cover" },
 ];
 
 export default function ProcessSection({ onBook }: { onBook: () => void }) {
@@ -57,8 +57,8 @@ export default function ProcessSection({ onBook }: { onBook: () => void }) {
               data-active={active === index}
               src={`/images/process/${cover}.webp`}
               alt=""
-              width="960"
-              height="1280"
+              width="512"
+              height="512"
               loading="lazy"
             />
           ))}
@@ -135,8 +135,8 @@ export default function ProcessSection({ onBook }: { onBook: () => void }) {
                 data-active={active === index}
                 src={`/images/process/${detail}.webp`}
                 alt=""
-                width="512"
-                height="512"
+                width="960"
+                height="1280"
                 loading="lazy"
               />
             ))}

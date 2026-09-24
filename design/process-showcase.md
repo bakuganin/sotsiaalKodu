@@ -1,6 +1,6 @@
 # Process section artwork
 
-Each step has its own background and circular photograph. Step 1 uses forest/conversation; step 2 uses support-cover/support-detail; step 3 uses meeting-cover/meeting-detail. Backgrounds are delivered as 960 × 1280 WebP and circular photographs as 512 × 512 WebP. All assets were created with the built-in image_gen tool in generation mode.
+Each step has its own background and circular photograph. The large panels show conversation, personal support and a meeting space; nature imagery is reserved for the circular thumbnails. Background/thumbnail pairs: step 1 conversation/forest; step 2 support-detail/support-cover; step 3 meeting-detail/meeting-cover. The original square photographs are 512 × 512 WebP and the nature photographs are 960 × 1280 WebP, cropped to their containers with object-fit. Filenames retain their original roles. All assets were created with the built-in image_gen tool in generation mode.
 
 ## process-support-detail
 
