@@ -9,9 +9,10 @@
 }
 .sk-header-solid,
 .sk-header-expanded {
-  background: #f7f8f4f5;
+  background: rgb(247 248 244 / 78%);
   box-shadow: 0 1px 0 #26371116;
-  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(24px) saturate(125%);
+  backdrop-filter: blur(24px) saturate(125%);
 }
 .site-header.sk-header.sk-header-solid {
   top: 0;
