@@ -1,11 +1,20 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
-export type SitePage = "home" | "services" | "team";
+export type LegalPageId = "company" | "privacy" | "cookies" | "terms";
+export type SitePage = "home" | "services" | "team" | LegalPageId;
+
+export function isLegalPage(page: SitePage): page is LegalPageId {
+  return ["company", "privacy", "cookies", "terms"].includes(page);
+}
 
 const routePaths: Record<string, SitePage> = {
   "/": "home",
   "/services": "services",
   "/team": "team",
+  "/company": "company",
+  "/privacy": "privacy",
+  "/cookies": "cookies",
+  "/terms": "terms",
 };
 const routeEvent = "sotsiaal:navigate";
 
@@ -22,6 +31,9 @@ function normalizedPath(path: string) {
 }
 
 function readLocation() {
+  if (window.location.hash === "#/privacy") {
+    history.replaceState(history.state, "", "/privacy/");
+  }
   return {
     pathname: normalizedPath(window.location.pathname),
     hash: window.location.hash,

@@ -16,10 +16,17 @@ export const organization = {
   phone: "+37253049699",
   phoneDisplay: "+372 5304 9699",
   email: "natalia.umarova@gmail.com",
-  legalAddress: "Tuleviku tn 7, 20307 Narva, Ida-Virumaa",
+  legalAddress: "Tuleviku tn 7, 20307 Narva, Ida-Virumaa, Эстония",
+  registeredAddress: "Ida-Viru maakond, Narva linn, Tuleviku tn 7, 20307",
+  legalForm: "Osaühing (OÜ) — общество с ограниченной ответственностью",
+  registrationDate: "04.09.2026",
+  shareCapital: "2 500 €",
+  financialYear: "01.01–31.12",
+  board: ["Natalia Umarova", "Eduard East"],
+  registryCheckedAt: "24.09.2026",
   registryUrl:
     "https://ariregister.rik.ee/est/company/17591732/Sotsiaalsete-Teenuste-Kodu-O%C3%9C",
-  // Public registry contacts; confirm these as customer-facing before launch.
+  // The registry address is not a confirmed appointment location.
   appointmentAddress: null,
   bookingMode: "demo",
 } as const;

@@ -11,6 +11,7 @@ import {
 import { BrandArtwork } from "../brand/BrandArtwork";
 import { serviceArtwork } from "../brand/serviceArtwork";
 import { getContent, organization } from "../content";
+import type { SitePage } from "./useSiteRoute";
 import "./navigation.css";
 
 const t = getContent();
@@ -18,7 +19,7 @@ const MENU_CLOSE_MS = 300;
 const HOVER_LEAVE_MS = 160;
 
 type SiteHeaderProps = {
-  page: "home" | "services" | "team";
+  page: SitePage;
   activeSection: string;
   onBook: () => void;
 };

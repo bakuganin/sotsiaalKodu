@@ -13,7 +13,8 @@ const escapeHtml = (value) =>
     .replaceAll(">", "&gt;");
 
 // Real directory entry points allow direct links and reloads on static hosting.
-for (const page of ["services", "team"]) {
+const pages = Object.keys(metadata).filter((page) => page !== "home");
+for (const page of pages) {
   const folder = new URL(`dist/${page}/`, root);
   await mkdir(folder, { recursive: true });
   const html = template
@@ -28,5 +29,5 @@ for (const page of ["services", "team"]) {
   await writeFile(new URL("index.html", folder), html);
 }
 console.log(
-  "Created /services/ and /team/ entry pages with individual metadata.",
+  `Created ${pages.map((page) => `/${page}/`).join(", ")} entry pages with individual metadata.`,
 );

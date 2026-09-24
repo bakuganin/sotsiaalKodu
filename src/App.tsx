@@ -33,9 +33,10 @@ import { BrandArtwork } from "./brand/BrandArtwork";
 import SectionIcon from "./brand/SectionIcon";
 import { serviceArtwork } from "./brand/serviceArtwork";
 import SiteHeader from "./navigation/SiteHeader";
-import { useSiteRoute } from "./navigation/useSiteRoute";
+import { isLegalPage, useSiteRoute } from "./navigation/useSiteRoute";
 import ServicesPage from "./pages/ServicesPage";
 import TeamPage from "./pages/TeamPage";
+import LegalPage, { legalPages } from "./pages/LegalPage";
 import pageMeta from "./content/page-meta.json";
 
 const t = getContent();
@@ -83,14 +84,9 @@ export default function App() {
   }>({ hash: "", scrollY: window.scrollY, trigger: null });
   const contentFrame = useRef<number | undefined>(undefined);
   const service = t.services.find((item) => hash === `#/services/${item.id}`);
-  const privacyOpen = hash === "#/privacy";
-  const unknownPage = hash.startsWith("#/") && !service && !privacyOpen;
+  const unknownPage = hash.startsWith("#/") && !service;
   const motionPaused = usePageMotionGate(
-    developmentNoticeOpen ||
-      bookingOpen ||
-      !!service ||
-      privacyOpen ||
-      unknownPage,
+    developmentNoticeOpen || bookingOpen || !!service || unknownPage,
   );
   useSiteMotion(siteRef, page, motionPaused);
   useHeroMotion(heroRef, motionPaused);
@@ -195,7 +191,9 @@ export default function App() {
         onBook={() => openBooking()}
       />
       <main id="main" tabIndex={-1}>
-        {page === "services" ? (
+        {isLegalPage(page) ? (
+          <LegalPage page={page} />
+        ) : page === "services" ? (
           <ServicesPage onBook={openBooking} />
         ) : page === "team" ? (
           <TeamPage onBook={openBooking} />
@@ -635,6 +633,7 @@ export default function App() {
                 <a href={`mailto:${organization.email}`}>
                   {organization.email}
                 </a>
+                <address>{organization.legalAddress}</address>
               </div>
               <nav className="meadow-links" aria-label="Навигация в подвале">
                 {t.header.nav.map((item) => (
@@ -649,14 +648,15 @@ export default function App() {
                     {item.label}
                   </a>
                 ))}
-                <a
-                  href="#/privacy"
-                  onClick={(e) => rememberContentOrigin(e.currentTarget)}
-                >
-                  {t.footer.privacy}
-                </a>
               </nav>
             </div>
+            <nav className="meadow-documents" aria-label="Правовая информация">
+              {legalPages.map(({ id, label }) => (
+                <a key={id} href={`/${id}/`}>
+                  {label}
+                </a>
+              ))}
+            </nav>
             <div className="meadow-legal">
               <span>
                 © {new Date().getFullYear()} {organization.name}
@@ -682,14 +682,9 @@ export default function App() {
         ref={contentDialog}
         contentKey={`${page}:${hash}`}
         closeLabel={t.common.close}
-        open={
-          !developmentNoticeOpen && (!!service || privacyOpen || unknownPage)
-        }
+        open={!developmentNoticeOpen && (!!service || unknownPage)}
         onClose={closeContent}
-        title={
-          service?.shortTitle ||
-          (privacyOpen ? t.privacy.title : t.common.notFound)
-        }
+        title={service?.shortTitle || t.common.notFound}
         className={service ? `service-detail theme-${service.theme}` : ""}
       >
         {service && (
@@ -728,7 +723,6 @@ export default function App() {
             </div>
           </>
         )}
-        {privacyOpen && t.privacy.paragraphs.map((p) => <p key={p}>{p}</p>)}
         {unknownPage && (
           <button
             className="button button-dark"

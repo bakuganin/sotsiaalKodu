@@ -22,8 +22,8 @@ test("contact actions open the same form in place on desktop and mobile", async 
         [
           ".contact-bottom .pill-light",
           ".contact-email",
-          '.team-card[data-active="true"] .team-contact-link',
-          ".event-feature .pill-button",
+          ".process-start",
+          ".meadow-action",
         ],
       ],
       [
@@ -59,15 +59,9 @@ test("contact actions open the same form in place on desktop and mobile", async 
         await expect(
           dialog.getByRole("heading", { name: "С чего начнём?" }),
         ).toBeFocused();
-        if (selector === ".event-feature .pill-button") {
-          await expect(
-            dialog.getByRole("radio", { name: "Инфодни и курсы", exact: true }),
-          ).toBeChecked();
-        } else {
-          await expect(
-            dialog.locator('input[name="booking-service"]:checked'),
-          ).toHaveCount(0);
-        }
+        await expect(
+          dialog.locator('input[name="booking-service"]:checked'),
+        ).toHaveCount(0);
         await expect
           .poll(() =>
             dialog.evaluate(

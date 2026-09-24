@@ -644,7 +644,10 @@ export default function BookingDialog({
               )}
             </div>
             <p className="booking-privacy" id="booking-privacy">
-              {copy.contactPrivacy}
+              {copy.contactPrivacy}{" "}
+              <a href="/privacy/" target="_blank" rel="noreferrer">
+                Политика конфиденциальности (в новой вкладке)
+              </a>
             </p>
             <div className="booking-actions">
               <button

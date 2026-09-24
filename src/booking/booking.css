@@ -505,6 +505,11 @@
   font-size: 0.875rem;
   line-height: 1.7;
 }
+.booking-privacy a {
+  color: var(--brand-forest);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 .booking-result-notice {
   padding: 17px 18px;
   border: 1px solid #dedfd9;

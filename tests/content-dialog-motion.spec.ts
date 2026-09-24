@@ -111,7 +111,7 @@ test("Escape and backdrop clicks use the same exit transition and preserve the d
 
   for (const [selector, action] of [
     [homeHelp, "escape"],
-    ['.footer-bottom a[href="#/privacy"]', "backdrop"],
+    ['.service-card[href="#/services/counselling"]', "backdrop"],
   ] as const) {
     const trigger = page.locator(selector);
     await trigger.click();
