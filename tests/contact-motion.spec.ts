@@ -176,11 +176,11 @@ test("cursor only highlights cards without changing their motion", async ({
   const bounds = await scene.boundingBox();
   const surfaces = scene.locator(".support-world-card-surface");
   // Hold the ambient animation at a fixed point to isolate the cursor's effect.
-  await surfaces.evaluateAll((elements) =>
-    elements.forEach((e) =>
-      e.getAnimations().forEach((animation) => animation.pause()),
-    ),
-  );
+  await surfaces.evaluateAll(async (elements) => {
+    const animations = elements.flatMap((e) => e.getAnimations());
+    animations.forEach((animation) => animation.pause());
+    await Promise.all(animations.map((animation) => animation.ready));
+  });
   const original = await surfaces.evaluateAll((elements) =>
     elements.map((e) => getComputedStyle(e).transform),
   );
@@ -197,7 +197,7 @@ test("cursor only highlights cards without changing their motion", async ({
     for (const card of await cards.all())
       await expect(card).toHaveCSS("transform", "none");
   }
-  await cards.first().hover();
+  await surfaces.first().hover();
   await expect(surfaces.first()).toHaveCSS(
     "border-color",
     "rgb(255, 255, 255)",
@@ -205,6 +205,10 @@ test("cursor only highlights cards without changing their motion", async ({
   await expect
     .poll(() => surfaces.first().evaluate((e) => getComputedStyle(e).boxShadow))
     .not.toBe(restingShadow);
+  await expect(surfaces.first()).not.toHaveCSS(
+    "background-color",
+    "rgba(0, 0, 0, 0)",
+  );
   expect(
     await surfaces.evaluateAll((elements) =>
       elements.map((e) => getComputedStyle(e).transform),
@@ -212,6 +216,10 @@ test("cursor only highlights cards without changing their motion", async ({
   ).toEqual(original);
   await page.mouse.move(0, 0);
   await expect(surfaces.first()).toHaveCSS("box-shadow", restingShadow);
+  await expect(surfaces.first()).toHaveCSS(
+    "background-color",
+    "rgba(0, 0, 0, 0)",
+  );
 
   for (const preference of ["system", "site"]) {
     if (preference === "system")
