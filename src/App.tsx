@@ -641,59 +641,84 @@ export default function App() {
         )}
       </main>
 
-      <footer className="site-footer">
-        <div className="container">
-          <div className="footer-main" data-motion="copy">
-            <div>
-              <Brand footer />
-              <p>{t.footer.tagline}</p>
+      <footer className="site-footer meadow-footer">
+        <div className="meadow-surface">
+          <img
+            className="meadow-background"
+            src="/images/footer-meadow.webp"
+            alt=""
+            width="1536"
+            height="1024"
+            loading="lazy"
+          />
+          <div className="meadow-content">
+            <div className="meadow-invitation" data-motion="copy">
+              <h2>
+                Больше заботы.
+                <br />
+                Больше опоры.
+                <br />
+                <span>В вашем ритме.</span>
+              </h2>
+              <button
+                className="meadow-action"
+                onClick={() => openBooking()}
+                aria-haspopup="dialog"
+              >
+                Давайте поговорим <ArrowUpRight size={20} aria-hidden="true" />
+              </button>
             </div>
-            <div className="footer-links">
-              {t.header.nav.map((item) => (
-                <a
-                  key={item.id}
-                  href={
-                    item.id === "services" || item.id === "team"
-                      ? `/${item.id}/`
-                      : `/#${item.id}`
-                  }
-                >
-                  {item.label}
+            <div className="meadow-info" data-motion="copy">
+              <div className="meadow-brand">
+                <Brand footer />
+                <p>{t.footer.tagline}</p>
+              </div>
+              <div className="meadow-contacts">
+                <a href={`tel:${organization.phone}`}>
+                  {organization.phoneDisplay}
                 </a>
-              ))}
+                <a href={`mailto:${organization.email}`}>
+                  {organization.email}
+                </a>
+              </div>
+              <nav className="meadow-links" aria-label="Навигация в подвале">
+                {t.header.nav.map((item) => (
+                  <a
+                    key={item.id}
+                    href={
+                      item.id === "services" || item.id === "team"
+                        ? `/${item.id}/`
+                        : `/#${item.id}`
+                    }
+                  >
+                    {item.label}
+                  </a>
+                ))}
+                <a
+                  href="#/privacy"
+                  onClick={(e) => rememberContentOrigin(e.currentTarget)}
+                >
+                  {t.footer.privacy}
+                </a>
+              </nav>
             </div>
-            <a className="back-top" href="#main" aria-label={t.common.backTop}>
-              <ArrowUpRight size={22} />
-            </a>
-          </div>
-          <div className="footer-bottom" data-motion="line">
-            <span>
-              © {new Date().getFullYear()} {organization.name}
-            </span>
-            <span>
-              {t.footer.registry}:{" "}
+            <div className="meadow-legal">
+              <span>
+                © {new Date().getFullYear()} {organization.name}
+              </span>
               <a
                 href={organization.registryUrl}
                 target="_blank"
                 rel="noreferrer"
               >
-                {organization.registryCode}
-                <ArrowUpRight size={12} />
+                {t.footer.registry}: {organization.registryCode}
               </a>
-            </span>
-            <a
-              href="#/privacy"
-              onClick={(e) => rememberContentOrigin(e.currentTarget)}
-            >
-              {t.footer.privacy}
-            </a>
-          </div>
-          <div className="footer-disclosure" data-motion="copy">
-            <span>{t.footer.imageNote}</span>
-            <span>
-              <span className="status-dot" />
-              {t.footer.prototype}
-            </span>
+              <a href="#main">{t.common.backTop} ↑</a>
+            </div>
+            <div className="meadow-disclosure">
+              <span>{t.footer.imageNote}</span>
+              <span>{t.footer.prototype}</span>
+            </div>
           </div>
         </div>
       </footer>

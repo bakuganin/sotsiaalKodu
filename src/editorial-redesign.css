@@ -164,3 +164,177 @@
 :root[data-a11y-reduce-motion="true"] .community-link svg {
   transition: none;
 }
+.site-footer.meadow-footer {
+  padding: 20px 16px 16px;
+  background: #080908;
+  color: white;
+}
+.meadow-surface {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 32px;
+  max-width: 1760px;
+  margin: 0 auto;
+  background: #343e2c;
+}
+.meadow-background {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 65%;
+  z-index: -2;
+}
+.meadow-surface::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    #131b175c 0%,
+    #15201536 40%,
+    #0b190bbf 78%,
+    #0b160ee6 100%
+  );
+}
+.meadow-content {
+  padding: 64px clamp(24px, 5vw, 80px) 26px;
+}
+.meadow-invitation {
+  text-align: center;
+  margin: 0 auto 120px;
+}
+.meadow-invitation h2 {
+  font-family: var(--heading);
+  font-size: clamp(2.25rem, 4vw, 4rem);
+  line-height: 1.1;
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  margin: 0 0 28px;
+  color: white;
+}
+.meadow-invitation h2 span {
+  color: #e0edb7;
+}
+.meadow-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  min-height: 54px;
+  border: 1px solid #f3ffce70;
+  border-radius: 100px;
+  background: #e0edb7;
+  color: #263711;
+  padding: 15px 26px;
+  font: inherit;
+  transition:
+    background 200ms ease,
+    transform 200ms ease;
+}
+.meadow-action:hover {
+  background: #edf6d2;
+  transform: translateY(-2px);
+}
+.meadow-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.2fr;
+  gap: 40px;
+  align-items: end;
+}
+.meadow-brand .brand-artwork {
+  filter: brightness(0) invert(1);
+  width: 175px;
+}
+.meadow-brand p {
+  margin: 15px 0 0;
+  max-width: 230px;
+  font-size: 1.125rem;
+  line-height: 1.45;
+}
+.meadow-contacts {
+  display: grid;
+  gap: 12px;
+  font-size: 0.95rem;
+}
+.meadow-links {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 24px;
+  font-size: 0.875rem;
+}
+.meadow-footer a {
+  color: inherit;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.meadow-footer a:hover {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+.meadow-legal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 14px 28px;
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid #ffffff30;
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+.meadow-disclosure {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+  color: #e0e5dc;
+  font-size: 0.7rem;
+  line-height: 1.5;
+}
+@media (max-width: 760px) {
+  .site-footer.meadow-footer {
+    padding: 8px;
+  }
+  .meadow-surface {
+    border-radius: 24px;
+  }
+  .meadow-content {
+    padding: 42px 24px 26px;
+  }
+  .meadow-background {
+    object-position: 42% center;
+  }
+  .meadow-invitation {
+    margin-bottom: 80px;
+  }
+  .meadow-action {
+    width: 100%;
+  }
+  .meadow-info {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  .meadow-links {
+    grid-row: 2;
+  }
+  .meadow-brand p {
+    max-width: 260px;
+  }
+  .meadow-legal,
+  .meadow-disclosure {
+    flex-direction: column;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .meadow-action {
+    transition: none;
+  }
+}
+:root[data-a11y-reduce-motion="true"] .meadow-action {
+  transition: none;
+}
