@@ -198,7 +198,7 @@ export default function TeamSection() {
           className="editorial-statement"
           data-motion="heading"
         >
-          Мы помогаем <span>найти опору</span>:{" "}
+          Мы помогаем <span>найти опору</span>{" "}
           <span className="statement-phrase">
             <img
               className="statement-art statement-leaves"
