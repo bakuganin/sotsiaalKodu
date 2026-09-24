@@ -1,5 +1,16 @@
 import { test, expect } from "./fixtures";
 
+const coverTitles = [
+  "Начнём с простого разговора",
+  "Поддержка, которая подходит вам",
+  "Встретимся в удобное время",
+];
+const coverDescriptions = [
+  "Расскажите, что вас беспокоит и какая помощь нужна. Мы внимательно выслушаем вас или вашего близкого.",
+  "Вместе разберёмся в вашей ситуации, обсудим варианты помощи и выберем посильный следующий шаг.",
+  "Согласуем время и формат первой встречи. Обсудим детали, чтобы вы знали, чего ожидать.",
+];
+
 for (const width of [1440, 390]) {
   test(`process tabs, arrows and contact work at ${width}px`, async ({
     page,
@@ -16,7 +27,14 @@ for (const width of [1440, 390]) {
     );
     const seenCovers = new Set<string>();
     const seenDetails = new Set<string>();
-    async function checkArtwork() {
+    async function checkSlide(index: number) {
+      const copy = section.locator('.process-cover-slide[data-active="true"]');
+      await expect(section.getByRole("heading", { level: 2 })).toHaveText(
+        coverTitles[index],
+      );
+      await expect(copy.locator("p")).toHaveText(coverDescriptions[index]);
+      await expect(copy).toHaveCSS("opacity", "1");
+      await expect(section.locator("#process-title")).toHaveCount(1);
       for (const [selector, seen] of [
         [".process-cover-image", seenCovers],
         [".process-detail-image", seenDetails],
@@ -33,20 +51,21 @@ for (const width of [1440, 390]) {
         }
       }
     }
-    await checkArtwork();
+    await checkSlide(0);
     const before = await section.boundingBox();
     await tabs.nth(1).click();
     await expect(section.getByRole("tabpanel")).toContainText(
       "Найдём подходящую помощь",
     );
-    await checkArtwork();
+    await checkSlide(1);
     await section.getByRole("button", { name: "Следующий шаг" }).click();
     await expect(tabs.nth(2)).toHaveAttribute("aria-selected", "true");
-    await checkArtwork();
+    await checkSlide(2);
     expect(seenCovers.size).toBe(3);
     expect(seenDetails.size).toBe(3);
     await section.getByRole("button", { name: "Следующий шаг" }).click();
     await expect(tabs.nth(0)).toHaveAttribute("aria-selected", "true");
+    await checkSlide(0);
     await tabs.nth(0).focus();
     await page.keyboard.press("End");
     await expect(tabs.nth(2)).toBeFocused();
@@ -54,6 +73,7 @@ for (const width of [1440, 390]) {
     await expect(tabs.nth(0)).toBeFocused();
     await page.keyboard.press("ArrowLeft");
     await expect(tabs.nth(2)).toBeFocused();
+    await checkSlide(2);
     const after = await section.boundingBox();
     expect(Math.abs(after!.height - before!.height)).toBeLessThan(2);
     expect(
@@ -76,15 +96,20 @@ test("process transition has intermediate frames and honors reduced motion", asy
   const samples = await section.evaluate(async (el) => {
     const panel = el.querySelectorAll(".process-step-panel")[1];
     (el.querySelectorAll('[role="tab"]')[1] as HTMLButtonElement).click();
-    const values: number[] = [];
+    const cover = el.querySelectorAll(".process-cover-slide")[1];
+    const values: { panel: number; cover: number }[] = [];
     const start = performance.now();
     while (performance.now() - start < 550) {
       await new Promise(requestAnimationFrame);
-      values.push(Number(getComputedStyle(panel).opacity));
+      values.push({
+        panel: Number(getComputedStyle(panel).opacity),
+        cover: Number(getComputedStyle(cover).opacity),
+      });
     }
     return values;
   });
-  expect(samples.some((x) => x > 0 && x < 1)).toBe(true);
+  expect(samples.some(({ panel }) => panel > 0 && panel < 1)).toBe(true);
+  expect(samples.some(({ cover }) => cover > 0 && cover < 1)).toBe(true);
   await page.emulateMedia({ reducedMotion: "reduce" });
   await section.getByRole("tab").nth(2).click();
   await expect(section.getByRole("tabpanel")).toContainText(
@@ -96,4 +121,7 @@ test("process transition has intermediate frames and honors reduced motion", asy
       .last()
       .evaluate((e) => getComputedStyle(e).transitionDuration),
   ).toBe("0s");
+  await expect(
+    section.locator('.process-cover-slide[data-active="true"]'),
+  ).toHaveCSS("transition-duration", "0s");
 });

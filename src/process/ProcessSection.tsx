@@ -62,8 +62,20 @@ export default function ProcessSection({ onBook }: { onBook: () => void }) {
             />
           ))}
           <div className="process-cover-copy">
-            <h2 id="process-title">{t.process.presentation.title}</h2>
-            <p>{t.process.presentation.description}</p>
+            {t.process.steps.map(({ cover }, index) => (
+              <div
+                key={cover.title}
+                className="process-cover-slide"
+                data-active={active === index}
+                aria-hidden={active !== index}
+                inert={active !== index}
+              >
+                <h2 id={active === index ? "process-title" : undefined}>
+                  {cover.title}
+                </h2>
+                <p>{cover.description}</p>
+              </div>
+            ))}
           </div>
           <div className="process-controls">
             <button
