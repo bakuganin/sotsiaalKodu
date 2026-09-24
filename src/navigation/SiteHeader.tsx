@@ -77,9 +77,10 @@ export default function SiteHeader({
   const closingMobile = useRef(false);
   const afterClose = useRef<(() => void) | undefined>(undefined);
 
-  const navHref = (id: string) => (id === "team" ? "/team/" : `/#${id}`);
+  const navHref = (id: string) =>
+    id === "team" || id === "contact" ? `/${id}/` : `/#${id}`;
   const isActive = (id: string) =>
-    page === "home" ? activeSection === id : page === id;
+    page === "home" ? activeSection === id && id !== "contact" : page === id;
 
   const clearHoverClose = useCallback(() => {
     window.clearTimeout(hoverCloseTimer.current);
@@ -360,7 +361,7 @@ export default function SiteHeader({
               data-active={isActive(item.id)}
               aria-current={
                 isActive(item.id)
-                  ? item.id === "team"
+                  ? page !== "home"
                     ? "page"
                     : "location"
                   : undefined
@@ -500,7 +501,7 @@ export default function SiteHeader({
                 onClick={followMobileLink}
                 aria-current={
                   isActive(item.id)
-                    ? item.id === "team"
+                    ? page !== "home"
                       ? "page"
                       : "location"
                     : undefined

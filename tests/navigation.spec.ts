@@ -212,8 +212,8 @@ test("services CTA and desktop/mobile navigation scroll smoothly, including a re
   await expect(page).toHaveURL(/#services$/);
   await expectAtSection(page, "services");
 
-  // These destinations remain home sections; services and team now have pages.
-  for (const id of ["about", "events", "contact", "about"]) {
+  // These destinations remain home sections; services, team and contacts have pages.
+  for (const id of ["about", "events", "about"]) {
     const link = navigation(page).locator(`a[href="/#${id}"]`);
     await resetToTop(page);
     expectSmooth(await sampleActivation(link));

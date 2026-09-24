@@ -36,6 +36,7 @@ import SiteHeader from "./navigation/SiteHeader";
 import { isLegalPage, useSiteRoute } from "./navigation/useSiteRoute";
 import ServicesPage from "./pages/ServicesPage";
 import TeamPage from "./pages/TeamPage";
+import ContactPage from "./pages/ContactPage";
 import LegalPage, { legalPages } from "./pages/LegalPage";
 import pageMeta from "./content/page-meta.json";
 
@@ -197,6 +198,8 @@ export default function App() {
           <ServicesPage onBook={openBooking} />
         ) : page === "team" ? (
           <TeamPage onBook={openBooking} />
+        ) : page === "contact" ? (
+          <ContactPage paused={motionPaused} />
         ) : (
           <>
             <section id="home" className="hero-section" ref={heroRef}>
@@ -640,7 +643,9 @@ export default function App() {
                   <a
                     key={item.id}
                     href={
-                      item.id === "services" || item.id === "team"
+                      item.id === "services" ||
+                      item.id === "team" ||
+                      item.id === "contact"
                         ? `/${item.id}/`
                         : `/#${item.id}`
                     }

@@ -6,20 +6,43 @@ import {
   Footprints,
   Clock3,
   HandHeart,
+  Phone,
+  Mail,
+  CalendarDays,
+  MapPin,
+  Building2,
+  type LucideIcon,
 } from "lucide-react";
-import { getContent } from "../content";
+import { getContent, organization } from "../content";
 import "./support-invitation.css";
 
 const t = getContent();
 const icons = [MessageCircle, Users, House, Footprints, Clock3, HandHeart];
+const contactCards = [
+  { label: "Позвонить нам", Icon: Phone, href: `tel:${organization.phone}` },
+  { label: "Написать нам", Icon: Mail, href: `mailto:${organization.email}` },
+  { label: "Как встретиться", Icon: CalendarDays, href: "#contact-meeting" },
+  { label: "Юридический адрес", Icon: MapPin, href: "#contact-address" },
+  { label: "Наша команда", Icon: Users, href: "/team/" },
+  { label: "Реквизиты компании", Icon: Building2, href: "/company/" },
+];
 
 export default function SupportInvitation({
   paused = false,
+  variant = "values",
 }: {
   paused?: boolean;
+  variant?: "values" | "contact";
 }) {
   const scene = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const cards: { label: string; Icon: LucideIcon; href?: string }[] =
+    variant === "contact"
+      ? contactCards
+      : t.contact.invitation.values.map((label, index) => ({
+          label,
+          Icon: icons[index],
+        }));
 
   useEffect(() => {
     const element = scene.current;
@@ -41,6 +64,7 @@ export default function SupportInvitation({
   return (
     <div
       className="support-invitation"
+      data-variant={variant}
       data-motion="copy"
       aria-labelledby="support-invitation-title"
     >
@@ -49,7 +73,9 @@ export default function SupportInvitation({
           id="support-invitation-title"
           className="eyebrow support-world-kicker"
         >
-          {t.contact.invitation.eyebrow}
+          {variant === "contact"
+            ? "ПРОСТРАНСТВО ДЛЯ ВАШЕЙ ИСТОРИИ"
+            : t.contact.invitation.eyebrow}
         </h2>
         <div
           ref={scene}
@@ -65,23 +91,27 @@ export default function SupportInvitation({
             alt=""
             width="960"
             height="960"
-            loading="lazy"
+            loading={variant === "contact" ? "eager" : "lazy"}
           />
           <ul
             className="support-world-cards"
-            aria-label="Наш подход к поддержке"
+            aria-label={
+              variant === "contact"
+                ? "Контакты и полезные ссылки"
+                : "Наш подход к поддержке"
+            }
           >
-            {t.contact.invitation.values.map((label, index) => {
-              const Icon = icons[index];
+            {cards.map(({ label, Icon, href }, index) => {
+              const Surface = href ? "a" : "div";
               return (
                 <li
                   className={`support-world-card support-world-card-${index + 1}`}
                   key={label}
                 >
-                  <div className="support-world-card-surface">
+                  <Surface className="support-world-card-surface" href={href}>
                     <Icon size={25} strokeWidth={1.8} aria-hidden="true" />
                     <span>{label}</span>
-                  </div>
+                  </Surface>
                 </li>
               );
             })}

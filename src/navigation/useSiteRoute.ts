@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 export type LegalPageId = "company" | "privacy" | "cookies" | "terms";
-export type SitePage = "home" | "services" | "team" | LegalPageId;
+export type SitePage = "home" | "services" | "team" | "contact" | LegalPageId;
 
 export function isLegalPage(page: SitePage): page is LegalPageId {
   return ["company", "privacy", "cookies", "terms"].includes(page);
@@ -11,6 +11,7 @@ const routePaths: Record<string, SitePage> = {
   "/": "home",
   "/services": "services",
   "/team": "team",
+  "/contact": "contact",
   "/company": "company",
   "/privacy": "privacy",
   "/cookies": "cookies",
