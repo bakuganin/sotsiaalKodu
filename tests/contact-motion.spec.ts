@@ -163,7 +163,7 @@ for (const width of [1440, 390]) {
   });
 }
 
-test("cursor moves all support cards together and motion settings disable both effects", async ({
+test("cursor only highlights cards without changing their motion", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
@@ -174,40 +174,44 @@ test("cursor moves all support cards together and motion settings disable both e
   await section.scrollIntoViewIfNeeded();
   await expect(section).toHaveAttribute("data-motion-state", "settled");
   const bounds = await scene.boundingBox();
-  await scene.hover({ position: { x: 60, y: bounds!.height / 2 } });
-  await expect
-    .poll(() =>
-      cards.evaluateAll((elements) =>
-        elements.every(
-          (e) => new DOMMatrixReadOnly(getComputedStyle(e).transform).m41 < -2,
-        ),
+  const surfaces = scene.locator(".support-world-card-surface");
+  // Hold the ambient animation at a fixed point to isolate the cursor's effect.
+  await surfaces.evaluateAll((elements) =>
+    elements.forEach((e) =>
+      e.getAnimations().forEach((animation) => animation.pause()),
+    ),
+  );
+  const original = await surfaces.evaluateAll((elements) =>
+    elements.map((e) => getComputedStyle(e).transform),
+  );
+  const restingShadow = await surfaces
+    .first()
+    .evaluate((e) => getComputedStyle(e).boxShadow);
+  for (const x of [60, bounds!.width - 60]) {
+    await scene.hover({ position: { x, y: bounds!.height / 2 } });
+    expect(
+      await surfaces.evaluateAll((elements) =>
+        elements.map((e) => getComputedStyle(e).transform),
       ),
-    )
-    .toBe(true);
-  await scene.hover({
-    position: { x: bounds!.width - 60, y: bounds!.height / 2 },
-  });
+    ).toEqual(original);
+    for (const card of await cards.all())
+      await expect(card).toHaveCSS("transform", "none");
+  }
+  await cards.first().hover();
+  await expect(surfaces.first()).toHaveCSS(
+    "border-color",
+    "rgb(255, 255, 255)",
+  );
   await expect
-    .poll(() =>
-      cards.evaluateAll((elements) =>
-        elements.every(
-          (e) => new DOMMatrixReadOnly(getComputedStyle(e).transform).m41 > 2,
-        ),
-      ),
-    )
-    .toBe(true);
+    .poll(() => surfaces.first().evaluate((e) => getComputedStyle(e).boxShadow))
+    .not.toBe(restingShadow);
+  expect(
+    await surfaces.evaluateAll((elements) =>
+      elements.map((e) => getComputedStyle(e).transform),
+    ),
+  ).toEqual(original);
   await page.mouse.move(0, 0);
-  await expect
-    .poll(() =>
-      cards.evaluateAll((elements) =>
-        elements.every(
-          (e) =>
-            Math.abs(new DOMMatrixReadOnly(getComputedStyle(e).transform).m41) <
-            0.1,
-        ),
-      ),
-    )
-    .toBe(true);
+  await expect(surfaces.first()).toHaveCSS("box-shadow", restingShadow);
 
   for (const preference of ["system", "site"]) {
     if (preference === "system")

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type PointerEvent } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   MessageCircle,
   Users,
@@ -12,35 +12,6 @@ import "./support-invitation.css";
 
 const t = getContent();
 const icons = [MessageCircle, Users, House, Footprints, Clock3, HandHeart];
-
-function moveCards(event: PointerEvent<HTMLDivElement>) {
-  if (
-    event.pointerType !== "mouse" ||
-    event.currentTarget.dataset.floating !== "true" ||
-    !matchMedia("(hover: hover) and (pointer: fine)").matches ||
-    matchMedia("(prefers-reduced-motion: reduce)").matches ||
-    document.documentElement.dataset.a11yReduceMotion === "true"
-  )
-    return;
-
-  const scene = event.currentTarget;
-  const bounds = scene.getBoundingClientRect();
-  const x = Math.max(
-    -1,
-    Math.min(1, ((event.clientX - bounds.left) / bounds.width - 0.5) * 2),
-  );
-  const y = Math.max(
-    -1,
-    Math.min(1, ((event.clientY - bounds.top) / bounds.height - 0.5) * 2),
-  );
-  scene.style.setProperty("--cards-x", `${x * 10}px`);
-  scene.style.setProperty("--cards-y", `${y * 7}px`);
-}
-
-function resetCards(event: PointerEvent<HTMLDivElement>) {
-  event.currentTarget.style.removeProperty("--cards-x");
-  event.currentTarget.style.removeProperty("--cards-y");
-}
 
 export default function SupportInvitation({
   paused = false,
@@ -84,9 +55,6 @@ export default function SupportInvitation({
           ref={scene}
           className="support-world-scene"
           data-floating={visible && !paused}
-          onPointerMove={moveCards}
-          onPointerLeave={resetCards}
-          onPointerCancel={resetCards}
         >
           <p className="support-world-word" aria-hidden="true">
             <span>SOTSIAAL</span> <span>KODU</span>
