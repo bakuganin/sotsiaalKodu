@@ -341,7 +341,12 @@ main:focus {
   position: relative;
   background: #080908;
   width: min(var(--hero-width), calc(100% - var(--hero-gutter) * 2));
-  margin: var(--hero-top-gap) auto 0;
+  margin: calc(94px + var(--hero-top-gap)) auto 0;
+}
+@media (max-width: 600px) {
+  .hero-section {
+    margin-top: calc(76px + var(--hero-top-gap));
+  }
 }
 .hero-panels {
   display: grid;
@@ -1928,7 +1933,7 @@ summary::-webkit-details-marker {
     display: flex;
     flex-direction: column;
     height: auto;
-    padding-top: 103px;
+    padding-top: 35px;
     padding-bottom: 35px;
   }
   .hero-label {

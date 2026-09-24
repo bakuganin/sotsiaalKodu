@@ -60,7 +60,6 @@ export default function SiteHeader({
   activeSection,
   onBook,
 }: SiteHeaderProps) {
-  const [scrolled, setScrolled] = useState(window.scrollY > 60);
   const [megaOpen, setMegaOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileVisible, setMobileVisible] = useState(false);
@@ -198,12 +197,6 @@ export default function SiteHeader({
   }
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
     closeMegaMenu();
   }, [page, activeSection, closeMegaMenu]);
 
@@ -266,7 +259,7 @@ export default function SiteHeader({
 
   return (
     <header
-      className={`site-header sk-header${scrolled || page !== "home" ? " sk-header-solid" : ""}${megaOpen ? " sk-header-expanded" : ""}`}
+      className={`site-header sk-header sk-header-solid${megaOpen ? " sk-header-expanded" : ""}`}
     >
       <div className="sk-header-bar container">
         <BrandLink />
