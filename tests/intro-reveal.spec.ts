@@ -3,7 +3,7 @@ import { closeAccessibility, openAccessibility } from "./accessibility-helpers";
 
 const composition = (page: Page) => page.locator(".intro-visual");
 const pieces = (page: Page) =>
-  composition(page).locator(".intro-branch, .intro-portraits > *");
+  composition(page).locator(".intro-branch, .intro-artworks > *");
 
 async function waitForSiteReady(page: Page) {
   await expect(page.locator("html")).toHaveAttribute("data-site-ready", "true");
@@ -34,9 +34,9 @@ for (const width of [1440, 390]) {
     const samples = await composition(page).evaluate(async (visual) => {
       const elements = [
         visual.querySelector(".intro-branch")!,
-        visual.querySelector(".intro-portrait-natalia")!,
+        visual.querySelector(".intro-care")!,
         visual.querySelector(".intro-leaf")!,
-        visual.querySelector(".intro-portrait-eduard")!,
+        visual.querySelector(".intro-contact")!,
       ];
       const frames: { time: number; opacity: number[]; translate: string[] }[] =
         [];
@@ -87,7 +87,7 @@ for (const width of [1440, 390]) {
     const revisitedOpacities = await composition(page).evaluate(
       async (visual) => {
         const elements = [
-          ...visual.querySelectorAll(".intro-branch, .intro-portraits > *"),
+          ...visual.querySelectorAll(".intro-branch, .intro-artworks > *"),
         ];
         const frames: number[][] = [];
         visual.scrollIntoView({ block: "center", behavior: "instant" });

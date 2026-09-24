@@ -609,13 +609,13 @@ main:focus {
   aspect-ratio: 31 / 17;
   isolation: isolate;
 }
-.intro-portraits {
+.intro-artworks {
   position: absolute;
   inset: 0;
   z-index: 1;
 }
-.intro-portraits > img,
-.intro-portraits > span {
+.intro-artworks > img,
+.intro-artworks > span {
   position: absolute;
   width: 17.5%;
   height: auto;
@@ -623,28 +623,29 @@ main:focus {
   border-radius: 24%;
   object-fit: cover;
 }
-.intro-portraits > .intro-portrait-eduard {
+.intro-artworks > .intro-contact {
   left: 6.5%;
   bottom: 12%;
-  object-position: 46% center;
 }
-.intro-portraits > .intro-leaf {
+.intro-artworks > .intro-leaf {
   left: 42%;
   bottom: 29%;
 }
-.intro-portraits > .intro-portrait-natalia {
+.intro-artworks > .intro-care {
   left: 75%;
   bottom: 42%;
-  object-position: 50% 13%;
 }
-.intro-portraits > span {
+.intro-artworks > span {
   background: #f6f7f0;
   aspect-ratio: 1;
   border-radius: 50%;
   display: grid;
   place-items: center;
 }
-.intro-portraits .service-art {
+.intro-artworks > :is(.intro-care, .intro-contact) {
+  border-radius: 24%;
+}
+.intro-artworks .service-art {
   width: 82%;
   height: 90%;
   object-fit: contain;
@@ -669,7 +670,7 @@ main:focus {
     gap: 24px;
     aspect-ratio: auto;
   }
-  .intro-portraits {
+  .intro-artworks {
     position: relative;
     inset: auto;
     display: flex;
@@ -678,18 +679,18 @@ main:focus {
     gap: 12px;
     min-height: 180px;
   }
-  .intro-portraits > img,
-  .intro-portraits > span {
+  .intro-artworks > img,
+  .intro-artworks > span {
     position: static;
     width: var(--intro-card-size);
     height: var(--intro-card-size);
     aspect-ratio: 1;
     flex-shrink: 0;
   }
-  .intro-portraits > .intro-portrait-natalia {
+  .intro-artworks > .intro-care {
     order: -1;
   }
-  .intro-portraits > .intro-portrait-eduard {
+  .intro-artworks > .intro-contact {
     order: 1;
   }
   .intro-branch {
@@ -2029,20 +2030,20 @@ summary::-webkit-details-marker {
     justify-self: center;
     aspect-ratio: 31 / 19;
   }
-  .intro-portraits > img,
-  .intro-portraits > span {
+  .intro-artworks > img,
+  .intro-artworks > span {
     width: clamp(82px, 26%, 125px);
   }
-  .intro-portraits > .intro-portrait-eduard {
+  .intro-artworks > .intro-contact {
     left: 2%;
     bottom: calc(10.7% + 12px);
   }
-  .intro-portraits > .intro-leaf {
+  .intro-artworks > .intro-leaf {
     left: 50%;
     bottom: calc(26% + 12px);
     transform: translateX(-50%);
   }
-  .intro-portraits > .intro-portrait-natalia {
+  .intro-artworks > .intro-care {
     left: auto;
     right: 2%;
     bottom: calc(37.5% + 12px);

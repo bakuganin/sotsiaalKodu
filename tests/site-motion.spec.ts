@@ -55,7 +55,7 @@ async function auditEntrances(page: Page) {
         if (
           event.target instanceof Element &&
           event.target.matches(
-            ".intro-branch, .intro-portraits > *, .principles-branch",
+            ".intro-branch, .intro-artworks > *, .principles-branch",
           )
         )
           record(event.target, `transition:${event.propertyName}`);

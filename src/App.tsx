@@ -301,15 +301,17 @@ export default function App() {
                     ))}
                   </div>
                   <IntroComposition paused={motionPaused}>
-                    <div className="intro-portraits">
-                      <img
-                        className="intro-portrait-eduard"
-                        src={t.team[1].photo}
-                        alt=""
-                        width="1000"
-                        height="660"
-                        loading="lazy"
-                      />
+                    <div className="intro-artworks">
+                      <span className="intro-contact">
+                        <img
+                          className="service-art"
+                          src="/images/section-icons/contact.webp"
+                          alt=""
+                          width="512"
+                          height="512"
+                          loading="lazy"
+                        />
+                      </span>
                       <span className="intro-leaf">
                         <img
                           className="service-art art-flower"
@@ -320,14 +322,16 @@ export default function App() {
                           loading="lazy"
                         />
                       </span>
-                      <img
-                        className="intro-portrait-natalia"
-                        src={t.team[0].photo}
-                        alt=""
-                        width="1080"
-                        height="1080"
-                        loading="lazy"
-                      />
+                      <span className="intro-care">
+                        <img
+                          className="service-art"
+                          src="/images/section-icons/care.webp"
+                          alt=""
+                          width="512"
+                          height="512"
+                          loading="lazy"
+                        />
+                      </span>
                     </div>
                     <img
                       className="intro-branch"

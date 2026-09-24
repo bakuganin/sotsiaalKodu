@@ -3,7 +3,7 @@
 }
 
 .intro-visual[data-reveal-ready="true"]
-  :is(.intro-branch, .intro-portraits > *) {
+  :is(.intro-branch, .intro-artworks > *) {
   opacity: 1;
   scale: 1;
   rotate: 0deg;
@@ -21,17 +21,17 @@
   transform-origin: 100% 60%;
 }
 
-.intro-visual[data-reveal-ready="true"] .intro-portraits > * {
+.intro-visual[data-reveal-ready="true"] .intro-artworks > * {
   transform-origin: 50% 95%;
 }
 
 .intro-visual[data-reveal-ready="true"]:not([data-revealed="true"])
-  :is(.intro-branch, .intro-portraits > *) {
+  :is(.intro-branch, .intro-artworks > *) {
   opacity: 0;
   transition: none;
 }
 
-/* The tapered edge follows the branch, then each portrait opens from its base. */
+/* The tapered edge follows the branch, then each artwork opens from its base. */
 .intro-visual[data-reveal-ready="true"]:not([data-revealed="true"])
   .intro-branch {
   clip-path: polygon(
@@ -47,7 +47,7 @@
 }
 
 .intro-visual[data-reveal-ready="true"]:not([data-revealed="true"])
-  .intro-portraits
+  .intro-artworks
   > * {
   clip-path: inset(66% 12% 0 12% round 45% 45% 22% 22%);
   scale: 0.92 1.04;
@@ -55,7 +55,7 @@
 }
 
 .intro-visual[data-reveal-ready="true"]:not([data-revealed="true"])
-  .intro-portraits
+  .intro-artworks
   > .intro-leaf {
   clip-path: inset(14% 7% 0 7% round 50%);
   scale: 0.82;
@@ -65,28 +65,28 @@
 .intro-visual .intro-branch {
   --intro-reveal-delay: 0ms;
 }
-.intro-visual .intro-portrait-natalia {
+.intro-visual .intro-care {
   --intro-reveal-delay: 240ms;
 }
 .intro-visual .intro-leaf {
   --intro-reveal-delay: 420ms;
 }
-.intro-visual .intro-portrait-eduard {
+.intro-visual .intro-contact {
   --intro-reveal-delay: 600ms;
 }
 
 @media (max-width: 760px) {
-  .intro-visual .intro-portrait-eduard {
+  .intro-visual .intro-contact {
     --intro-reveal-delay: 240ms;
   }
-  .intro-visual .intro-portrait-natalia {
+  .intro-visual .intro-care {
     --intro-reveal-delay: 600ms;
   }
 }
 
 :root[data-a11y-reduce-motion="true"]
   .intro-visual[data-reveal-ready="true"]
-  :is(.intro-branch, .intro-portraits > *) {
+  :is(.intro-branch, .intro-artworks > *) {
   opacity: 1 !important;
   clip-path: none !important;
   scale: none !important;
@@ -96,7 +96,7 @@
 
 @media (prefers-reduced-motion: reduce), print {
   .intro-visual[data-reveal-ready="true"]
-    :is(.intro-branch, .intro-portraits > *) {
+    :is(.intro-branch, .intro-artworks > *) {
     opacity: 1 !important;
     clip-path: none !important;
     scale: none !important;
