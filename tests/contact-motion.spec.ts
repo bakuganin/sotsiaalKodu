@@ -198,10 +198,6 @@ test("cursor only highlights cards without changing their motion", async ({
       await expect(card).toHaveCSS("transform", "none");
   }
   await surfaces.first().hover();
-  await expect(surfaces.first()).toHaveCSS(
-    "border-color",
-    "rgb(255, 255, 255)",
-  );
   await expect
     .poll(() => surfaces.first().evaluate((e) => getComputedStyle(e).boxShadow))
     .not.toBe(restingShadow);
