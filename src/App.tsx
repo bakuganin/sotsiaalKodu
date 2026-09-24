@@ -484,19 +484,14 @@ export default function App() {
                 </article>
               </section>
 
+              <TeamSection />
+
               <section
                 className="process-section process-editorial container"
                 aria-labelledby="process-title"
               >
                 <aside className="process-rail" data-motion="copy">
                   <p className="eyebrow">КАК МЫ ПОМОГАЕМ</p>
-                  <img
-                    src="/images/section-icons/contact.webp"
-                    alt=""
-                    width="512"
-                    height="512"
-                    loading="lazy"
-                  />
                 </aside>
                 <div className="process-body">
                   <h2
@@ -504,16 +499,8 @@ export default function App() {
                     className="editorial-statement"
                     data-motion="heading"
                   >
-                    Начнём с <span>простого разговора.</span>{" "}
-                    <img
-                      className="statement-art"
-                      src="/images/service-flower.webp"
-                      alt=""
-                      width="512"
-                      height="560"
-                      loading="lazy"
-                    />{" "}
-                    Вместе найдём следующий шаг.
+                    Начнём с <span>простого разговора</span> и вместе найдём
+                    следующий шаг.
                   </h2>
                   <AnimatedAccordion
                     variant="process"
@@ -522,8 +509,6 @@ export default function App() {
                   />
                 </div>
               </section>
-
-              <TeamSection onBook={() => openBooking("courses")} />
 
               <section className="faq-section">
                 <div className="editorial-section container">

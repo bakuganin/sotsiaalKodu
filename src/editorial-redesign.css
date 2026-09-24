@@ -338,3 +338,11 @@
 :root[data-a11y-reduce-motion="true"] .meadow-action {
   transition: none;
 }
+.community-section .editorial-statement > .statement-phrase {
+  display: inline-block;
+  white-space: nowrap;
+  color: inherit;
+}
+.community-footer {
+  grid-template-columns: 1fr;
+}

@@ -177,7 +177,7 @@ export function TeamGallery({
   );
 }
 
-export default function TeamSection({ onBook }: { onBook: () => void }) {
+export default function TeamSection() {
   return (
     <section
       id="events"
@@ -187,9 +187,9 @@ export default function TeamSection({ onBook }: { onBook: () => void }) {
       <div id="team" className="community-rail" data-motion="copy">
         <p className="eyebrow">КОМАНДА И ВСТРЕЧИ</p>
         <p>
-          Быть рядом.
+          Быть рядом
           <br />
-          <span>Находить опору вместе.</span>
+          <span>Находить опору вместе</span>
         </p>
       </div>
       <div className="community-body">
@@ -198,40 +198,26 @@ export default function TeamSection({ onBook }: { onBook: () => void }) {
           className="editorial-statement"
           data-motion="heading"
         >
-          За поддержкой — <span>команда.</span> Мы слушаем{" "}
-          <img
-            className="statement-art"
-            src="/images/intro/glass-nest.webp"
-            alt=""
-            width="512"
-            height="512"
-            loading="lazy"
-          />{" "}
-          вашу историю, помогаем <span>найти свой путь</span> и создаём встречи,
-          где можно <span>учиться друг у друга.</span>
+          Мы помогаем <span>найти опору</span> —{" "}
+          <span className="statement-phrase">
+            <img
+              className="statement-art"
+              src="/images/intro/glass-nest.webp"
+              alt=""
+              width="512"
+              height="512"
+              loading="lazy"
+            />{" "}
+            слушаем
+          </span>{" "}
+          вашу историю, вместе ищем <span>подходящую помощь</span> и создаём
+          встречи, где можно <span>учиться друг у друга.</span>
         </h2>
         <div className="community-footer" data-motion="copy">
           <a className="community-link" href="/team/">
             Познакомиться с командой{" "}
             <ArrowUpRight size={20} aria-hidden="true" />
           </a>
-          <div className="community-events">
-            <p>
-              <span className="status-dot" />
-              {t.events.status}
-            </p>
-            <p>
-              Даты встреч опубликуем позже. Пока расскажите, какая тема была бы
-              вам полезна.
-            </p>
-            <button
-              className="community-link"
-              onClick={onBook}
-              aria-haspopup="dialog"
-            >
-              {t.events.action} <ArrowUpRight size={20} aria-hidden="true" />
-            </button>
-          </div>
         </div>
       </div>
     </section>
