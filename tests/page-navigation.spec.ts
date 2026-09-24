@@ -123,7 +123,7 @@ test("service category navigation uses a real page path and preserves SPA Back/F
     .click();
   await expect(page).toHaveURL(/\/services\/#home-help$/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-    "Поддержка, которая подходит вам.",
+    "Поддержка, которая подходит вам",
   );
   await expectAtAnchor(page, "home-help");
   await expect(
@@ -153,7 +153,7 @@ test("service category navigation uses a real page path and preserves SPA Back/F
     .click();
   await expect(page).toHaveURL(/\/team\/$/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-    "Люди, которым важно ваше благополучие.",
+    "Люди, которым важно ваше благополучие",
   );
   await desktopNavigation(page)
     .getByRole("link", { name: "О нас", exact: true })
@@ -163,7 +163,7 @@ test("service category navigation uses a real page path and preserves SPA Back/F
   await page.goBack();
   await expect(page).toHaveURL(/\/team\/$/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-    "Люди, которым важно ваше благополучие.",
+    "Люди, которым важно ваше благополучие",
   );
 });
 
@@ -213,12 +213,12 @@ test("standalone services and team survive direct visits and reload with distinc
     {
       path: "/services/",
       title: /Услуги.*Sotsiaal Kodu/,
-      heading: "Поддержка, которая подходит вам.",
+      heading: "Поддержка, которая подходит вам",
     },
     {
       path: "/team/",
       title: /Команда.*Sotsiaal Kodu/,
-      heading: "Люди, которым важно ваше благополучие.",
+      heading: "Люди, которым важно ваше благополучие",
     },
   ];
   for (const entry of pages) {
@@ -333,7 +333,7 @@ for (const width of [390, 320]) {
     await expect(menu).not.toBeVisible();
     await expect(page).toHaveURL(/\/services\/$/);
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-      "Поддержка, которая подходит вам.",
+      "Поддержка, которая подходит вам",
     );
     await expectNoOverflow(page);
   });

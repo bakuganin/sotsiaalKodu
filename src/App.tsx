@@ -233,7 +233,6 @@ export default function App() {
                       <span className="hero-title-accent">
                         {t.hero.secondAccent}
                       </span>
-                      .
                     </span>
                   </h1>
                   <div className="hero-actions">
@@ -480,7 +479,7 @@ export default function App() {
                       {t.calm.careFirstRest}
                       <br />
                       {t.calm.careSecondLead}
-                      <span>{t.calm.careSecondAccent}</span>.
+                      <span>{t.calm.careSecondAccent}</span>
                     </h2>
                   </div>
                 </article>
@@ -615,7 +614,7 @@ export default function App() {
           />
           <div className="meadow-content">
             <div className="meadow-invitation" data-motion="copy">
-              <h2>Вместе легче сделать шаг.</h2>
+              <h2>Вместе легче сделать шаг</h2>
               <button
                 className="meadow-action"
                 onClick={() => openBooking()}

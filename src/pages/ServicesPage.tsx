@@ -23,7 +23,7 @@ export default function ServicesPage({ onBook }: DetailPageProps) {
           <div data-motion="heading">
             <p className="detail-kicker">Четыре направления помощи</p>
             <h1 id="services-page-title">
-              Поддержка, которая <span>подходит вам.</span>
+              Поддержка, которая <span>подходит вам</span>
             </h1>
           </div>
           <div

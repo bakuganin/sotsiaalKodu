@@ -40,7 +40,7 @@ export function PageContact({ onBook }: DetailPageProps) {
       <div className="detail-contact-copy">
         <p className="detail-kicker">Первый шаг — в вашем ритме</p>
         <h2 id="detail-contact-title">
-          Начнём <span>с разговора.</span>
+          Начнём <span>с разговора</span>
         </h2>
         <p>
           Не обязательно знать, какая помощь вам нужна. Расскажите о своей

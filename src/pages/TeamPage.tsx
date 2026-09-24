@@ -18,7 +18,7 @@ export default function TeamPage({ onBook }: DetailPageProps) {
           <div data-motion="heading">
             <p className="detail-kicker">Люди, которые рядом</p>
             <h1 id="team-page-title">
-              Люди, которым важно <span>ваше благополучие.</span>
+              Люди, которым важно <span>ваше благополучие</span>
             </h1>
           </div>
           <div
@@ -44,7 +44,7 @@ export default function TeamPage({ onBook }: DetailPageProps) {
           <div data-motion="heading">
             <p className="detail-kicker">Что нас объединяет</p>
             <h2 id="people-approach-title">
-              В основе заботы — <span>внимание к человеку.</span>
+              В основе заботы — <span>внимание к человеку</span>
             </h2>
             <p>{t.teamSection.profileText}</p>
           </div>

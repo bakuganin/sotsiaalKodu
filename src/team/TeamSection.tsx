@@ -223,7 +223,7 @@ export default function TeamSection() {
             />{" "}
             где
           </span>{" "}
-          можно <span>учиться друг у друга.</span>
+          можно <span>учиться друг у друга</span>
         </h2>
         <div className="community-footer" data-motion="copy">
           <a className="community-link" href="/team/">
