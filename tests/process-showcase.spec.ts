@@ -14,13 +14,37 @@ for (const width of [1440, 390]) {
     await expect(section.getByRole("tabpanel")).toContainText(
       "Расскажите о себе",
     );
+    const seenCovers = new Set<string>();
+    const seenDetails = new Set<string>();
+    async function checkArtwork() {
+      for (const [selector, seen] of [
+        [".process-cover-image", seenCovers],
+        [".process-detail-image", seenDetails],
+      ] as const) {
+        const image = section.locator(`${selector}[data-active="true"]`);
+        await expect(image).toHaveCount(1);
+        await expect(image).toHaveCSS("opacity", "1");
+        await image.evaluate((element: HTMLImageElement) => element.decode());
+        seen.add((await image.getAttribute("src"))!);
+        for (const inactive of await section
+          .locator(`${selector}[data-active="false"]`)
+          .all()) {
+          await expect(inactive).toHaveCSS("opacity", "0");
+        }
+      }
+    }
+    await checkArtwork();
     const before = await section.boundingBox();
     await tabs.nth(1).click();
     await expect(section.getByRole("tabpanel")).toContainText(
       "Найдём подходящую помощь",
     );
+    await checkArtwork();
     await section.getByRole("button", { name: "Следующий шаг" }).click();
     await expect(tabs.nth(2)).toHaveAttribute("aria-selected", "true");
+    await checkArtwork();
+    expect(seenCovers.size).toBe(3);
+    expect(seenDetails.size).toBe(3);
     await section.getByRole("button", { name: "Следующий шаг" }).click();
     await expect(tabs.nth(0)).toHaveAttribute("aria-selected", "true");
     await tabs.nth(0).focus();

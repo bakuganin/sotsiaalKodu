@@ -12,6 +12,11 @@ import "./process.css";
 
 const t = getContent();
 const icons = [MessageCircle, Sprout, CalendarDays];
+const artwork = [
+  { cover: "forest", detail: "conversation" },
+  { cover: "support-cover", detail: "support-detail" },
+  { cover: "meeting-cover", detail: "meeting-detail" },
+];
 
 export default function ProcessSection({ onBook }: { onBook: () => void }) {
   const [active, setActive] = useState(0);
@@ -44,14 +49,18 @@ export default function ProcessSection({ onBook }: { onBook: () => void }) {
       </p>
       <div className="process-spread">
         <div className="process-cover">
-          <img
-            className="process-cover-image"
-            src="/images/process/forest.webp"
-            alt=""
-            width="960"
-            height="1280"
-            loading="lazy"
-          />
+          {artwork.map(({ cover }, index) => (
+            <img
+              key={cover}
+              className="process-cover-image"
+              data-active={active === index}
+              src={`/images/process/${cover}.webp`}
+              alt=""
+              width="960"
+              height="1280"
+              loading="lazy"
+            />
+          ))}
           <div className="process-cover-copy">
             <h2 id="process-title">{t.process.presentation.title}</h2>
             <p>{t.process.presentation.description}</p>
@@ -105,14 +114,20 @@ export default function ProcessSection({ onBook }: { onBook: () => void }) {
               );
             })}
           </div>
-          <img
-            className="process-conversation"
-            src="/images/process/conversation.webp"
-            alt=""
-            width="512"
-            height="512"
-            loading="lazy"
-          />
+          <div className="process-conversation" aria-hidden="true">
+            {artwork.map(({ detail }, index) => (
+              <img
+                key={detail}
+                className="process-detail-image"
+                data-active={active === index}
+                src={`/images/process/${detail}.webp`}
+                alt=""
+                width="512"
+                height="512"
+                loading="lazy"
+              />
+            ))}
+          </div>
           <div className="process-panels">
             {t.process.steps.map((step, index) => (
               <div
