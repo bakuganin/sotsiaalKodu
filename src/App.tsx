@@ -1,3 +1,4 @@
+import "./editorial-redesign.css";
 import { useEffect, useRef, useState } from "react";
 import {
   ArrowDown,
@@ -483,57 +484,46 @@ export default function App() {
                 </article>
               </section>
 
-              <section className="process-section editorial-section container">
-                <div className="section-rail" data-motion="heading">
-                  <p className="eyebrow">{t.process.eyebrow}</p>
-                  <h2 className="display-heading">
-                    {t.calm.processFirst}
-                    <br />
-                    <span>{t.calm.processAccent}</span>
-                    <br />
-                    {t.calm.processLast}
-                  </h2>
-                </div>
-                <AnimatedAccordion
-                  variant="process"
-                  items={t.process.steps}
-                  defaultOpenIndex={0}
-                />
-              </section>
-
-              <TeamSection />
-
-              <section id="events" className="events-section container">
-                <div className="section-rail" data-motion="heading">
-                  <p className="eyebrow">{t.events.eyebrow}</p>
-                  <h2 className="display-heading">{t.events.title}</h2>
-                  <p>{t.events.description}</p>
-                </div>
-                <div className="event-feature" data-motion="card">
-                  <span className="event-status">
-                    <span className="status-dot" />
-                    {t.events.status}
-                  </span>
-                  <h3>{t.events.emptyTitle}</h3>
-                  <p>{t.events.emptyDescription}</p>
-                  <div className="event-tags">
-                    {t.events.tags.map((tag) => (
-                      <span key={tag}>{tag}</span>
-                    ))}
-                  </div>
-                  <button
-                    type="button"
-                    className="pill-button"
-                    onClick={() => openBooking("courses")}
-                    aria-haspopup="dialog"
+              <section
+                className="process-section process-editorial container"
+                aria-labelledby="process-title"
+              >
+                <aside className="process-rail" data-motion="copy">
+                  <p className="eyebrow">КАК МЫ ПОМОГАЕМ</p>
+                  <img
+                    src="/images/section-icons/contact.webp"
+                    alt=""
+                    width="512"
+                    height="512"
+                    loading="lazy"
+                  />
+                </aside>
+                <div className="process-body">
+                  <h2
+                    id="process-title"
+                    className="editorial-statement"
+                    data-motion="heading"
                   >
-                    <span>{t.events.action}</span>
-                    <span className="pill-arrow">
-                      <ArrowUpRight size={22} />
-                    </span>
-                  </button>
+                    Начнём с <span>простого разговора.</span>{" "}
+                    <img
+                      className="statement-art"
+                      src="/images/service-flower.webp"
+                      alt=""
+                      width="512"
+                      height="560"
+                      loading="lazy"
+                    />{" "}
+                    Вместе найдём следующий шаг.
+                  </h2>
+                  <AnimatedAccordion
+                    variant="process"
+                    items={t.process.steps}
+                    defaultOpenIndex={0}
+                  />
                 </div>
               </section>
+
+              <TeamSection onBook={() => openBooking("courses")} />
 
               <section className="faq-section">
                 <div className="editorial-section container">

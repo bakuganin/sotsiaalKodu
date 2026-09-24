@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, useState, type CSSProperties } from "react";
-import { ArrowUpRight, BookOpen, Flower2, Plus, Scale } from "lucide-react";
+import { ArrowUpRight, BookOpen, Plus, Scale } from "lucide-react";
 import { getContent } from "../content";
 import "./team.css";
 
@@ -177,38 +177,61 @@ export function TeamGallery({
   );
 }
 
-export default function TeamSection() {
+export default function TeamSection({ onBook }: { onBook: () => void }) {
   return (
-    <section id="team" className="team-preview" aria-labelledby="team-title">
-      <div className="container team-preview-layout">
-        <div data-motion="heading">
-          <p className="team-eyebrow">
-            <Flower2 size={14} aria-hidden="true" />
-            {t.teamPreview.eyebrow}
-          </p>
-          <h2 id="team-title">{t.teamPreview.title}</h2>
-          <a className="pill-button" href="/team/">
-            <span>{t.teamPreview.action}</span>
-            <span className="pill-arrow">
-              <ArrowUpRight size={22} aria-hidden="true" />
-            </span>
+    <section
+      id="events"
+      className="community-section container"
+      aria-labelledby="team-title"
+    >
+      <div id="team" className="community-rail" data-motion="copy">
+        <p className="eyebrow">КОМАНДА И ВСТРЕЧИ</p>
+        <p>
+          Быть рядом.
+          <br />
+          <span>Находить опору вместе.</span>
+        </p>
+      </div>
+      <div className="community-body">
+        <h2
+          id="team-title"
+          className="editorial-statement"
+          data-motion="heading"
+        >
+          За поддержкой — <span>команда.</span> Мы слушаем{" "}
+          <img
+            className="statement-art"
+            src="/images/intro/glass-nest.webp"
+            alt=""
+            width="512"
+            height="512"
+            loading="lazy"
+          />{" "}
+          вашу историю, помогаем <span>найти свой путь</span> и создаём встречи,
+          где можно <span>учиться друг у друга.</span>
+        </h2>
+        <div className="community-footer" data-motion="copy">
+          <a className="community-link" href="/team/">
+            Познакомиться с командой{" "}
+            <ArrowUpRight size={20} aria-hidden="true" />
           </a>
-        </div>
-        <div className="team-preview-details" data-motion="copy">
-          <p className="team-preview-lead">{t.teamPreview.description}</p>
-          <ul className="team-preview-topics">
-            {t.teamPreview.topics.map((topic, index) => (
-              <li key={topic.title}>
-                <span className="team-preview-number" aria-hidden="true">
-                  0{index + 1}
-                </span>
-                <div>
-                  <h3>{topic.title}</h3>
-                  <p>{topic.text}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <div className="community-events">
+            <p>
+              <span className="status-dot" />
+              {t.events.status}
+            </p>
+            <p>
+              Даты встреч опубликуем позже. Пока расскажите, какая тема была бы
+              вам полезна.
+            </p>
+            <button
+              className="community-link"
+              onClick={onBook}
+              aria-haspopup="dialog"
+            >
+              {t.events.action} <ArrowUpRight size={20} aria-hidden="true" />
+            </button>
+          </div>
         </div>
       </div>
     </section>
